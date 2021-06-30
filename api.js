@@ -3,12 +3,12 @@ var token = require('./createJWT.js');
 exports.setApp = function ( app, client )
 {
 
-    app.post('/api/addcard', async (req, res, next) =>
+    app.post('/api/addrun', async (req, res, next) =>
     {
       // incoming: userId, color
       // outgoing: error
         
-      const { userId, card, jwtToken } = req.body;
+      const { userId, run, jwtToken } = req.body;
 
       try
       {
@@ -24,14 +24,14 @@ exports.setApp = function ( app, client )
         console.log(e.message);
       }
     
-      const newCard = {Card:card,UserId:userId};
+      const newRun = {Run:run,UserId:userId};
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
     
       try
       {
         const db = client.db();
-        const result = db.collection('Cards').insertOne(newCard);
+        const result = db.collection('Runs').insertOne(newRun);
         // newCard.save();        
       }
       catch(e)
@@ -98,7 +98,7 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });
     
-    app.post('/api/searchcards', async (req, res, next) => 
+    app.post('/api/searchruns', async (req, res, next) => 
     {
       // incoming: userId, search
       // outgoing: results[], error
@@ -124,13 +124,13 @@ exports.setApp = function ( app, client )
       var _search = search.trim();
       
       const db = client.db();
-      const results = await db.collection('Cards').find({"Card":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Runs').find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
             
       var _ret = [];
       for( var i=0; i<results.length; i++ )
       {
-        _ret.push( results[i].Card );
+        _ret.push( results[i].Run );
       }
       
       var refreshedToken = null;

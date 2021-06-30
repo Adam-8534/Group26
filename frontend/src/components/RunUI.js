@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function CardUI()
+function RunUI()
 {
 
     var bp = require('./Path.js');
     var storage = require('../tokenStorage.js');
     const jwt = require("jsonwebtoken");
     
-    var card = '';
+    var run = '';
     var search = '';
 
     const [message,setMessage] = useState('');
     const [searchResults,setResults] = useState('');
-    const [cardList,setCardList] = useState('');
+    const [runList,setRunList] = useState('');
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
@@ -21,18 +21,18 @@ function CardUI()
     var firstName = ud.firstName;
     var lastName = ud.lastName;
 	
-    const addCard = async event => 
+    const addRun = async event => 
     {
 	    event.preventDefault();
 
         var tok = storage.retrieveToken();
-       var obj = {userId:userId,card:card.value,jwtToken:tok};
+       var obj = {userId:userId,run:run.value,jwtToken:tok};
        var js = JSON.stringify(obj);
 
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('api/addcard'),	
+            url: bp.buildPath('api/addrun'),	
             headers: 
             {
                 'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ function CardUI()
             }
             else
             {
-                setMessage('Card has been added');
+                setMessage('Run has been added');
                 storage.storeToken( {accessToken:retTok} );
             }
         })
@@ -63,7 +63,7 @@ function CardUI()
 
 	};
 
-    const searchCard = async event => 
+    const searchRun = async event => 
     {
         event.preventDefault();
         		
@@ -74,7 +74,7 @@ function CardUI()
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('api/searchcards'),	
+            url: bp.buildPath('api/searchruns'),	
             headers: 
             {
                 'Content-Type': 'application/json'
@@ -104,8 +104,8 @@ function CardUI()
                         resultText += ', ';
                     }
                 }
-                setResults('Card(s) have been retrieved');
-                setCardList(resultText);
+                setResults('Run(s) have been retrieved');
+                setRunList(resultText);
                 storage.storeToken( {accessToken:retTok} );
             }
         })
@@ -117,21 +117,21 @@ function CardUI()
     };
 
     return(
-        <div id="cardUIDiv">
+        <div id="runUIDiv">
         <br />
-        <input type="text" id="searchText" placeholder="Card To Search For" 
+        <input type="text" id="searchText" placeholder="Run To Search For" 
             ref={(c) => search = c} />
-        <button type="button" id="searchCardButton" class="buttons" 
-            onClick={searchCard}> Search Card</button><br />
-        <span id="cardSearchResult">{searchResults}</span>
-        <p id="cardList">{cardList}</p><br /><br />
-        <input type="text" id="cardText" placeholder="Card To Add" 
-            ref={(c) => card = c} />
-        <button type="button" id="addCardButton" class="buttons" 
-            onClick={addCard}> Add Card </button><br />
-        <span id="cardAddResult">{message}</span>
+        <button type="button" id="searchRunButton" class="buttons" 
+            onClick={searchRun}> Search Run</button><br />
+        <span id="runSearchResult">{searchResults}</span>
+        <p id="runList">{runList}</p><br /><br />
+        <input type="text" id="runText" placeholder="Run To Add" 
+            ref={(c) => run = c} />
+        <button type="button" id="addRunButton" class="buttons" 
+            onClick={addRun}> Add Run </button><br />
+        <span id="runAddResult">{message}</span>
         </div>
     );
 }
 
-export default CardUI;
+export default RunUI;
