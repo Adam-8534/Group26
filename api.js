@@ -152,19 +152,28 @@ exports.setApp = function ( app, client )
 
     app.post('/api/register', async (req, res, next) => 
     {
+      // connect to db
+      const db = client.db();
+
       // req.body to pull the info from the webpage. 
-      const { firstname, lastname, login, password: plainTextPassword  } = req.body
+      const { email, firstname, lastname, login, password: plainTextPassword  } = req.body
+
+      // set userId to the unique username and email combo 
+      const userId = email + login; 
+
 
       // bcrypt to encrypt password  *** need to do**** 
       const password = await bcrypt.hash(plainTextPassword, 10)
 
       // create a new user 
-      const newUser = {FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
+      const newUser = {Email:email, UserId:userId, FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
 
+      // temp for testing. 
       console.log(newUser); 
 
+      // check if username or email is taken, 
+
       try{
-        const db = client.db();
         const new_user = await db.collection('Users').insertOne(newUser);
         console.log('User created')
 
