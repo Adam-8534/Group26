@@ -147,5 +147,33 @@ exports.setApp = function ( app, client )
       
       res.status(200).json(ret);
     });
+
+
+    app.post('/api/register', async (req, res, next) => 
+    {
+      // req.body to pull the info from the webpage. 
+      const { firstname, lastname, login, password  } = req.body
+
+      // bcrypt to encrypt password  *** need to do**** 
+
+      // create a new user 
+      const newUser = {FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
+
+      console.log(newUser); 
+
+      try{
+        const db = client.db();
+        const new_user = await db.collection('Users').insertOne(newUser);
+        console.log('User created')
+
+      } 
+      catch(e){
+        console.log(error)
+        return res.json({ status:'error'})
+      }
+
+      res.json({Status: 'All Good'}); 
+
+    });
     
 }
