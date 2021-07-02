@@ -1,4 +1,5 @@
 var token = require('./createJWT.js');
+const bcrypt = require('bcryptjs')
 
 exports.setApp = function ( app, client )
 {
@@ -152,9 +153,10 @@ exports.setApp = function ( app, client )
     app.post('/api/register', async (req, res, next) => 
     {
       // req.body to pull the info from the webpage. 
-      const { firstname, lastname, login, password  } = req.body
+      const { firstname, lastname, login, password: plainTextPassword  } = req.body
 
       // bcrypt to encrypt password  *** need to do**** 
+      const password = await bcrypt.hash(plainTextPassword, 10)
 
       // create a new user 
       const newUser = {FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
@@ -177,3 +179,4 @@ exports.setApp = function ( app, client )
     });
     
 }
+
