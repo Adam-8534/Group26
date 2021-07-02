@@ -168,18 +168,33 @@ exports.setApp = function ( app, client )
       // create a new user 
       const newUser = {Email:email, UserId:userId, FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
 
-      // temp for testing. 
-      console.log(newUser); 
+      
+      // check if email is taken,
+      const email_check = await db.collection('Users').find({Email:email}).toArray();
 
-      // check if username or email is taken, 
+      //console.log(email_check); 
+      if(Array.isArray(email_check) && email_check.length)
+      {
+        // console.log('User Not created')
+        return res.json({ status:'Email already taken!'})
+      }
 
+      // check if username is taken,
+      const username_check = await db.collection('Users').find({Login:login}).toArray();
+      if( Array.isArray(username_check) && username_check.length)
+      {
+        // console.log('User Not created')
+        return res.json({ status:'UserName already taken!'})
+      }
+        
+    
       try{
         const new_user = await db.collection('Users').insertOne(newUser);
         console.log('User created')
 
       } 
       catch(e){
-        console.log(error)
+        // console.log(error)
         return res.json({ status:'error'})
       }
 
