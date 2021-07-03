@@ -1,5 +1,5 @@
 var token = require('./createJWT.js');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 exports.setApp = function ( app, client )
 {
@@ -34,6 +34,60 @@ exports.setApp = function ( app, client )
         const db = client.db();
         const result = db.collection('Runs').insertOne(newRun);
         // newCard.save();        
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+
+    // delete run 
+    app.post('/api/deleterun', async (req, res, next) =>
+    {
+      // incoming: userId
+      // outgoing: error
+        
+      const { userId, run, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      // const db = client.db();
+      // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
+      // console.log(deleteRun)
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
+    
+      try
+      {
+        const db = client.db();
+        const result = await db.collection('Runs').deleteOne({Run:run});
+		// console.log(result);
       }
       catch(e)
       {
