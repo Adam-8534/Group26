@@ -262,4 +262,57 @@ exports.setApp = function ( app, client )
 
     });
     
+    app.post('/api/searchusers', async (req, res, next) => 
+    {
+      // incoming: userId, search
+      // outgoing: results[], error
+    
+      var error = '';
+    
+      const { userId, search, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+      
+      var _search = search.trim();
+      
+      const db = client.db();
+      const results = await db.collection('Users').find({"Email":{$regex:_search+'.*', $options:'r'}}).toArray();
+      // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
+            
+      var _ret = [];
+      for( var i=0; i<results.length; i++ )
+      {
+        _ret.push( results[i].Email);
+        _ret.push( results[i].FirstName );
+        _ret.push( results[i].LastName );
+      }
+      
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { results:_ret, error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+    
 }
+
