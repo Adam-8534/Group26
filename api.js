@@ -119,7 +119,10 @@ exports.setApp = function ( app, client )
       const { login, password } = req.body;
     
       const db = client.db();
-      const results = await db.collection('Users').find({Login:login,Password:password}).toArray();
+      const results = await db.collection('Users').find({Login:login}).toArray(); 
+	  // console.log(password);
+      // console.log(results[0].Password);
+	  const validPassword = await bcrypt.compare(password,results[0].Password);
       // const results = await User.find({ Login: login, Password: password});
       // console.log(results);
 
@@ -149,8 +152,11 @@ exports.setApp = function ( app, client )
       {
           ret = {error:"Login/Password incorrect"};
       }
-    
-      res.status(200).json(ret);
+	  if(validPassword){
+		 res.status(200).json(ret);
+	  } else{
+		 res.status(400).json({ error: "Invalid Password" });
+	  }
     });
     
     app.post('/api/searchruns', async (req, res, next) => 
@@ -257,4 +263,3 @@ exports.setApp = function ( app, client )
     });
     
 }
-
