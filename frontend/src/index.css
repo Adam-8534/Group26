@@ -18,11 +18,89 @@ code {
 }
 
 /* base styles */
+/* top right bottom left (TRBL)*/
 * {
   margin: 0;
   font-family: "Quicksand";
   color: #333;
 }
+
+.login-page-container {
+  max-width: 600px;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 10px 10px 10px 10px;
+  margin: 150px auto;
+}
+
+#login-div {
+  padding: 5px;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 1000px;
+}
+
+.login-subsection {
+  padding: 5px;
+  display: block;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 1000px;
+}
+
+.login-input {
+  margin: 5px auto;
+}
+
+#login-button {
+  margin: 5px;
+}
+
+#sign-up-div {
+  padding: 5px;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 400px;
+}
+
+#sign-up-link:active {
+  color: #17bf33;
+}
+
+#register-div {
+  padding: 5px;
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 400px;
+}
+
+
+.page-container {
+  max-width: 1100px;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 10px 0px 10px 0px;
+  margin: 20px auto;
+}
+
 .navbar {
   padding: 20px;
   display: flex;
@@ -60,12 +138,6 @@ code {
   color: #17bf33;
 }
 
-button {
-  background-color: #17bf33;
-  border-radius: 8px;
-  border: 1px solid black;
-}
-
 .homepage-subsection {
   padding: 5px;
   display: flex;
@@ -80,11 +152,34 @@ button {
   max-width: 1000px;
 }
 
-#run-text {
+.search-run-text {
   margin-right: 5px;
 }
-#search-text {
-  margin-right: 5px;
+
+.search-run-text:hover {
+  cursor: text;
+}
+
+.buttons {
+  color: white;
+  background-color: #17bf33;
+  border-radius: 8px;
+  border: 1px solid black;
+}
+
+.buttons:hover {
+  cursor: pointer;
+}
+
+.search-run-buttons{
+  color: white;
+  background-color: #17bf33;
+  border-radius: 8px;
+  border: 1px solid black;
+}
+
+.search-run-buttons:hover {
+  cursor: pointer;
 }
 
 #userName {

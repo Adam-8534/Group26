@@ -4,6 +4,7 @@ import './App.css';
 
 import LoginPage from './pages/LoginPage';
 import RunPage from './pages/RunPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
       <Switch>
         <Route path="/" exact>
           <LoginPage />
+        </Route>
+        <Route path="/register" exact>
+          <RegisterPage />
         </Route>
         <Route path="/homepage" exact>
           <RunPage />

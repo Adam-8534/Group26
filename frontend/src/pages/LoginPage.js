@@ -1,15 +1,15 @@
 import React from 'react';
-
-import PageTitle from '../components/PageTitle';
-import Login from '../components/Login';
+import Login from '../components/login/Login';
+import SignUp from '../components/login/SignUp';
 
 const LoginPage = () =>
 {
 
     return(
-      <div>
-        <PageTitle />
+      <div className="login-page-container">
         <Login />
+        <SignUp />
+        
       </div>
     );
 };
