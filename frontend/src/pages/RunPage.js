@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PageTitle from '../components/PageTitle';
+import RunPageNavbar from '../components/RunPageNavbar';
 import LoggedInName from '../components/LoggedInName';
 import RunUI from '../components/RunUI';
 
@@ -8,7 +8,7 @@ const RunPage = () =>
 {
     return(
         <div>
-            <PageTitle />
+            <RunPageNavbar />
             <LoggedInName />
             <RunUI />
         </div>

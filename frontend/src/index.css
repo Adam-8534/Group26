@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,9 +7,115 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background: rgb(89,120,63);
+  background: radial-gradient(circle, rgba(89,120,63,1) 0%, rgba(67,138,12,1) 49%);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* base styles */
+* {
+  margin: 0;
+  font-family: "Quicksand";
+  color: #333;
+}
+.navbar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  margin: 15px auto 10px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 1000px;
+}
+.navbar h1 {
+  background-color: #454a45;
+  padding: 2px;
+  border-radius: 8px;
+  color: #17bf33;
+}
+.navbar .links {
+  margin-left: auto;
+}
+.navbar .links .logout-button {
+  color: white;
+  background-color: #17bf33;
+  border-radius: 8px;
+}
+.navbar .links .logout-button:hover {
+  cursor: pointer;
+  color: black;
+}
+.navbar a {
+  margin-left: 16px;
+  text-decoration: none;
+  padding: 6px;
+}
+.navbar a:hover {
+  color: #17bf33;
+}
+
+button {
+  background-color: #17bf33;
+  border-radius: 8px;
+  border: 1px solid black;
+}
+
+.homepage-subsection {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 1000px;
+}
+
+#run-text {
+  margin-right: 5px;
+}
+#search-text {
+  margin-right: 5px;
+}
+
+#userName {
+  padding: 10px;
+  margin: 0 auto;
+  color: #17bf33;
+  background-color: #454a45;
+  border-radius: 16px;
+}
+
+.input-field {
+  padding: 5px 10px;
+}
+
+.content {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* blog previews / list */
+.blog-preview {
+  padding: 10px 16px;
+  margin: 20px 0;
+  border-bottom: 1px solid #fafafa;
+}
+.blog-preview:hover {
+  box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+}
+.blog-preview h2 {
+  font-size: 20px;
+  color: #f1356d;
+  margin-bottom: 8px;
 }

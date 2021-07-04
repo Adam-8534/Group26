@@ -12,7 +12,7 @@ function App() {
         <Route path="/" exact>
           <LoginPage />
         </Route>
-        <Route path="/runs" exact>
+        <Route path="/homepage" exact>
           <RunPage />
         </Route>
         <Redirect to="/" />

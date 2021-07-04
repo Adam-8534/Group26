@@ -17,9 +17,12 @@ function RunUI()
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
-    var userId = ud.id;
-    var firstName = ud.firstName;
-    var lastName = ud.lastName;
+    // var userId = ud.id;
+    // var firstName = ud.firstName;
+    // var lastName = ud.lastName;
+    var userId = 12;
+    var firstName = "firstname";
+    var lastName = "lastname";
 	
     const addRun = async event => 
     {
@@ -117,19 +120,25 @@ function RunUI()
     };
 
     return(
-        <div id="runUIDiv">
+        <div className="homepage-subsection" id="run-ui-div">
         <br />
-        <input type="text" id="searchText" placeholder="Run To Search For" 
-            ref={(c) => search = c} />
-        <button type="button" id="searchRunButton" class="buttons" 
-            onClick={searchRun}> Search Run</button><br />
-        <span id="runSearchResult">{searchResults}</span>
-        <p id="runList">{runList}</p><br /><br />
-        <input type="text" id="runText" placeholder="Run To Add" 
-            ref={(c) => run = c} />
-        <button type="button" id="addRunButton" class="buttons" 
-            onClick={addRun}> Add Run </button><br />
-        <span id="runAddResult">{message}</span>
+        <div className="input-field">
+            <input type="text" id="search-text" placeholder="Run To Search For" 
+                ref={(c) => search = c} />
+            <button type="button" id="searchRunButton" className="buttons" 
+                onClick={searchRun}> Search Run</button><br />
+            <span id="runSearchResult">{searchResults}</span>
+        </div>
+        <div className="input-field">
+            <p id="runList">{runList}</p>
+            <input type="text" id="run-text" placeholder="Run To Add" 
+                ref={(c) => run = c} />
+            <button type="button" id="addRunButton" className="buttons" 
+                onClick={addRun}> Add Run </button><br />
+            <span id="runAddResult">{message}</span>
+        </div>
+        
+        
         </div>
     );
 }
