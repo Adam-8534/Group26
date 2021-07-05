@@ -226,7 +226,8 @@ exports.setApp = function ( app, client )
       const password = await bcrypt.hash(plainTextPassword, 10)
 
       // create a new user 
-      const newUser = {Email:email, UserId:userId, FirstName:firstname, LastName:lastname, Login:login, Password:password }; // add userid UserId:userId
+      const fullname = firstname + ' ' + lastname;
+      const newUser = {Email:email, UserId:userId, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password }; // add userid UserId:userId
 
       
       // check if email is taken,
@@ -288,15 +289,16 @@ exports.setApp = function ( app, client )
       var _search = search.trim();
       
       const db = client.db();
-      const results = await db.collection('Users').find({"Email":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
             
       var _ret = [];
       for( var i=0; i<results.length; i++ )
       {
         _ret.push( results[i].Email);
-        _ret.push( results[i].FirstName );
-        _ret.push( results[i].LastName );
+        _ret.push( results[i].UserId);
+        _ret.push( results[i].FirstName);
+        _ret.push( results[i].LastName);
       }
       
       var refreshedToken = null;
