@@ -19,7 +19,6 @@ const RunPageNavbar = () => {
         <a href="">Connect</a>
         <a className="logout-button" onClick={doLogout}>Log out</a>
       </div>
-      <hr></hr>
     </nav>
   );
 }

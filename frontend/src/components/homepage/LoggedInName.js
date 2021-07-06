@@ -12,15 +12,6 @@ function LoggedInName()
     var firstName = "firstname";
     var lastName = "lastname";
 
-    const doLogout = event => 
-    {
-	    event.preventDefault();
-
-      localStorage.removeItem("user_data")
-      window.location.href = '/';
-
-    };
-
   return(
    <div className="homepage-subsection" id="logged-in-div">
     <h2 id="userName">Welcome, {firstName} {lastName}!<br />Lets get running!</h2><br />
