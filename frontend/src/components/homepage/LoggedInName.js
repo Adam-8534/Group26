@@ -5,12 +5,9 @@ function LoggedInName()
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
-    // var userId = ud.id;
-    // var firstName = ud.firstName;
-    // var lastName = ud.lastName;
-    var userId = 12;
-    var firstName = "firstname";
-    var lastName = "lastname";
+    var userId = ud.id;
+    var firstName = ud.firstName;
+    var lastName = ud.lastName;
 
   return(
    <div className="homepage-subsection" id="logged-in-div">

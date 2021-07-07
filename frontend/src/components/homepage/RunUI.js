@@ -17,12 +17,12 @@ function RunUI()
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
-    // var userId = ud.id;
-    // var firstName = ud.firstName;
-    // var lastName = ud.lastName;
-    var userId = 12;
-    var firstName = "firstname";
-    var lastName = "lastname";
+    var userId = ud.id;
+    var firstName = ud.firstName;
+    var lastName = ud.lastName;
+    // var userId = 12;
+    // var firstName = "firstname";
+    // var lastName = "lastname";
 	
     const addRun = async event => 
     {
@@ -35,7 +35,7 @@ function RunUI()
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('api/addrun'),	
+            url: bp.buildPath('../../../../api/addrun'),	
             headers: 
             {
                 'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ function RunUI()
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('api/searchruns'),	
+            url: bp.buildPath('../../../../api/searchruns'),	
             headers: 
             {
                 'Content-Type': 'application/json'

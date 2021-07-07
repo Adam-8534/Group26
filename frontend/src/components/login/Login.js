@@ -22,7 +22,7 @@ function Login()
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('api/login'),	
+            url: bp.buildPath('../../../../api/login'),	
             headers: 
             {
                 'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ function Login()
                   
                 var user = {firstName:firstName,lastName:lastName,id:userId}
                 localStorage.setItem('user_data', JSON.stringify(user));
-                window.location.href = '/runs';
+                window.location.href = '/homepage';
             }
         })
         .catch(function (error) 
