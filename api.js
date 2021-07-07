@@ -185,7 +185,7 @@ exports.setApp = function ( app, client )
       var _search = search.trim();
       
       const db = client.db();
-      const results = await db.collection('Runs').find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'r'} }, { UserId: userId } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
             
       var _ret = [];
@@ -316,5 +316,60 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });
     
+    // delete user NOT WORKING 
+    app.post('/api/deleteuser', async (req, res, next) =>
+    {
+      // incoming: userId
+      // outgoing: error
+        
+      const { userId, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      // const db = client.db();
+      // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
+      // console.log(deleteRun)
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
+    
+      try
+      {
+        const db = client.db();
+        const result = await db.collection('Users').deleteOne({UserId:userId});
+		// console.log(result);
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+    
 }
+
 
