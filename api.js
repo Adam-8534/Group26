@@ -219,15 +219,18 @@ exports.setApp = function ( app, client )
       const { email, firstname, lastname, login, password: plainTextPassword  } = req.body
 
       // set userId to the unique username and email combo 
-      const userId = email + login; 
+      const userId_array = await db.collection('Users').find().toArray();
+        
+      const arraylength = userId_array.length
 
 
       // bcrypt to encrypt password  *** need to do**** 
       const password = await bcrypt.hash(plainTextPassword, 10)
+      
 
       // create a new user 
       const fullname = firstname + ' ' + lastname;
-      const newUser = {Email:email, UserId:userId, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password }; // add userid UserId:userId
+      const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password }; // add userid UserId:userId
 
       
       // check if email is taken,
@@ -366,6 +369,67 @@ exports.setApp = function ( app, client )
       }
     
       var ret = { error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+    
+    app.post('/api/editUser', async (req, res, next) => 
+    {
+      // incoming: userId
+      // outgoing: results[], error
+    
+      var error = '';
+    
+      const { userId, firstname, lastname, email, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+      
+      const db = client.db();  
+      // lets update the user  
+      try{
+          // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
+          db.collection('Users').updateOne(
+            { "UserId" : userId },
+            { $set: { "FirstName" : firstname , "LastName" : lastname, "Email" : email } }
+            );
+           // console.log(results); 
+      } catch(e){
+        console.log(e);
+      }
+      
+            
+  /*    var _ret = [];
+      for( var i=0; i<results.length; i++ )
+      {
+        _ret.push( results[i].Email);
+        _ret.push( results[i].UserId);
+        _ret.push( results[i].FirstName);
+        _ret.push( results[i].LastName);
+      }
+   */   
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken }; // results:_ret,
       
       res.status(200).json(ret);
     });
