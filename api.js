@@ -1,6 +1,7 @@
 var token = require('./createJWT.js');
 const bcrypt = require('bcryptjs');
 
+
 exports.setApp = function ( app, client )
 {
 
@@ -221,7 +222,16 @@ exports.setApp = function ( app, client )
       // set userId to the unique username and email combo 
       const userId_array = await db.collection('Users').find().toArray();
         
-      const arraylength = userId_array.length
+      var arraylength = userId_array.length
+	  
+	  // check if a user already has this id, 
+	  const id_check = await db.collection('Users').find({UserId:arraylength + 1}).toArray();
+		// if the array bigger than 0 we need to fix our id. 
+	  if (id_check.length > 0)
+	  {
+		  console.log("TAKEN"); 
+		  arraylength = arraylength + 35 + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1) ;
+	  }
 
 
       // bcrypt to encrypt password  *** need to do**** 
