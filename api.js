@@ -25,8 +25,10 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+       
+      var datecreated = new Date().toLocaleString();
     
-      const newRun = {Run:run,UserId:userId};
+      const newRun = {Run:run,UserId:userId, DateCreated:datecreated , Time:0, Distance:0, Pace:0};
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
     
@@ -237,10 +239,13 @@ exports.setApp = function ( app, client )
       // bcrypt to encrypt password  *** need to do**** 
       const password = await bcrypt.hash(plainTextPassword, 10)
       
+      // lets make an empty friends array.
+      let friends_array = []; 
+      
 
       // create a new user 
       const fullname = firstname + ' ' + lastname;
-      const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password }; // add userid UserId:userId
+      const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password, TotalRuns:0, TotalDIstance:0, TotalTime:0, FriendsArray:friends_array }; // add userid UserId:userId
 
       
       // check if email is taken,
@@ -443,6 +448,75 @@ exports.setApp = function ( app, client )
       
       res.status(200).json(ret);
     });
+    
+    app.post('/api/addfriend', async (req, res, next) =>
+    {
+      // incoming: userId, 
+      // outgoing: error
+        
+      const { userId, userId_toadd, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+       
+     
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
+        
+      // connect to db. 
+      const db = client.db();
+        // check if friend is already added, 
+      const check = await db.collection('Users').find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
+       console.log(check); 
+        
+       if (Array.isArray(check) && check.length )
+        { 
+          var r = {error:'You already have this user added as a friend!'};
+          res.status(200).json(r);
+          return;
+        }
+      
+      
+   
+      try
+      {
+        const result = db.collection('Users').updateOne(
+            { "UserId" : userId },
+            { $push: { "FriendsArray" : userId_toadd } }
+            );
+        // newCard.save();        
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+    
     
 }
 
