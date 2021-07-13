@@ -517,6 +517,62 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });
     
+    app.post('/api/removefriend', async (req, res, next) =>
+    {
+      // incoming: userId, 
+      // outgoing: error
+        
+      const { userId, userId_toremove, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+       
+     
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
+        
+      // connect to db. 
+      const db = client.db();
+   
+      try
+      {
+        const result = db.collection('Users').updateOne(
+            { "UserId" : userId },
+            { $pull: { "FriendsArray" : userId_toremove } }
+            );
+        // newCard.save();        
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
+    
     
 }
 
