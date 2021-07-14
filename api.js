@@ -1,5 +1,7 @@
 var token = require('./createJWT.js');
 const bcrypt = require('bcryptjs');
+const sgMail = require("@sendgrid/mail"); 
+sgMail.setApiKey("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"); 
 
 
 exports.setApp = function ( app, client )
@@ -36,7 +38,13 @@ exports.setApp = function ( app, client )
       {
         const db = client.db();
         const result = db.collection('Runs').insertOne(newRun);
-        // newCard.save();        
+        
+        // update the user !
+        const result1 = db.collection('Users').updateOne(
+            { "UserId" : userId },
+             { $inc: { "TotalRuns": 1 } }
+            );  
+                
       }
       catch(e)
       {
@@ -242,12 +250,17 @@ exports.setApp = function ( app, client )
       // lets make an empty friends array.
       let friends_array = [];
       let defaultValue = 0;
-      
+        
+      // create key to verify.
+      let key = Math.floor(Math.random() * (9999 - 1000) + 1000);
+        
+      console.log(key); 
+      let verify = false;
 
       // create a new user 
       const fullname = firstname + ' ' + lastname;
       const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname,
-         Login:login, Password:password, TotalRuns:defaultValue, TotalDistance:defaultValue, TotalTime:defaultValue, FriendsArray:friends_array }; // add userid UserId:userId
+         Login:login, Password:password, TotalRuns:defaultValue, TotalDistance:defaultValue, TotalTime:defaultValue, Key:key, FriendsArray:friends_array, IsVerified:verify }; // add userid UserId:userId
 
       
       // check if email is taken,
@@ -267,6 +280,25 @@ exports.setApp = function ( app, client )
         // console.log('User Not created')
         return res.json({ status:'UserName already taken!'})
       }
+      
+      
+      
+        
+      // SEND CONFIRM EMAIL:
+      
+      const msg = {
+        to: "" + email + "",
+        from: "akbobsmith79@gmail.com",
+        subject: "Here is your email buddy",
+        text: "Enter this key: "+ key + "" 
+      };
+      
+      sgMail.send(msg).then(() => {
+      console.log('Message sent')
+      }).catch((error) => {
+      console.log(error.response.body)
+      // console.log(error.response.body.errors[0].message)
+      }) 
         
     
       try{
