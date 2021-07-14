@@ -240,12 +240,14 @@ exports.setApp = function ( app, client )
       const password = await bcrypt.hash(plainTextPassword, 10)
       
       // lets make an empty friends array.
-      let friends_array = []; 
+      let friends_array = [];
+      let defaultValue = 0;
       
 
       // create a new user 
       const fullname = firstname + ' ' + lastname;
-      const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname, Login:login, Password:password, TotalRuns:0, TotalDIstance:0, TotalTime:0, FriendsArray:friends_array }; // add userid UserId:userId
+      const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname,
+         Login:login, Password:password, TotalRuns:defaultValue, TotalDistance:defaultValue, TotalTime:defaultValue, FriendsArray:friends_array }; // add userid UserId:userId
 
       
       // check if email is taken,
