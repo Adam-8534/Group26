@@ -311,7 +311,7 @@ exports.setApp = function ( app, client )
         return res.json({ status:'error'})
       }
 
-      res.json({Status: 'All Good'}); 
+      res.json({status: 'All Good'}); 
 
     });
     
@@ -458,16 +458,7 @@ exports.setApp = function ( app, client )
         console.log(e);
       }
       
-            
-  /*    var _ret = [];
-      for( var i=0; i<results.length; i++ )
-      {
-        _ret.push( results[i].Email);
-        _ret.push( results[i].UserId);
-        _ret.push( results[i].FirstName);
-        _ret.push( results[i].LastName);
-      }
-   */   
+ 
       var refreshedToken = null;
       try
       {
@@ -725,6 +716,71 @@ exports.setApp = function ( app, client )
       
       res.status(200).json(ret);
     });
+    
+    app.post('/api/verifyuser', async (req, res, next) => 
+    {
+      // incoming: userId
+      // outgoing: results[], error
+    
+      var error = '';
+    
+      const { userId, text, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+        
+      // connect to the db 
+      const db = client.db();
+      // grab user 
+     const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
+      // check if key matches. 
+      console.log(results[0].Key);  
+       if ( text.localeCompare( results[0].Key) != 0 )
+       {
+          console.log('Key does not match!');
+          return;
+       }
+     
+      
+      // lets update the user  
+      try{
+          // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
+          db.collection('Users').updateOne(
+            { "UserId" : userId },
+            { $set: { "IsVerified" : true  } }
+            );
+           // console.log(results); 
+      } catch(e){
+        console.log(e);
+      }
+      
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken }; // results:_ret,
+      
+      res.status(200).json(ret);
+    });
+    
+    
     
 }
 
