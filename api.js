@@ -36,7 +36,13 @@ exports.setApp = function ( app, client )
       {
         const db = client.db();
         const result = db.collection('Runs').insertOne(newRun);
-        // newCard.save();        
+        
+        // update the user !
+        const result1 = db.collection('Users').updateOne(
+            { "UserId" : userId },
+             { $inc: { "TotalRuns": 1 } }
+            );  
+                
       }
       catch(e)
       {
