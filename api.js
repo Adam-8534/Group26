@@ -602,26 +602,21 @@ exports.setApp = function ( app, client )
     
       // fill arrray with the friends of user. 
       let fill_array = results[0].FriendsArray;
-      for ( var i = 0; i < results[0].FriendsArray; i++)
-      {
-         
-         // console.log(fill_array[i]);
-          
-      }
+     
  
         
       // Now lets find all these users, or this users friends, and return all that info for front end. 
       const results3 = await db.collection('Users').find( { UserId: { $in : fill_array}}).toArray(); 
       
       console.log(results3); 
+        var _ret = [];
+        _ret.push( results3 );
         
-      var _ret = [];
-      for( var i=0; i<20; i++ )
-      {
-          // now lets get all these friends in an array 
-    //       const results2 = await db.collection('Users').find({"UserId":results[i].FriendsArray}).toArray();  
-    ///      _ret.push( results2 );
-      }
+    //  var _ret = [];
+    //  for( var i=0; i <= results3.length; i++ )
+    //  { 
+   //       _ret.push( results3 );
+    //  }
       
       var refreshedToken = null;
       try
@@ -638,6 +633,64 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });
     
+     app.post('/api/searchfriends', async (req, res, next) => 
+    {
+      // incoming: userId, search
+      // outgoing: results[], error
+    
+      var error = '';
+    
+      const { userId, search, jwtToken } = req.body;
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+      
+      var _search = search.trim();
+      
+      const db = client.db();
+         // lets get logged in user 
+      const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
+    
+      // fill arrray with the friends of user. 
+      let fill_array = results[0].FriendsArray;
+     
+ 
+      // Now lets find all these users, or this users friends, and return all that info for front end. 
+                                               //    .find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray();
+      const results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : fill_array}} , {FullName:{$regex:_search+'.*', $options:'r'}} ] } ).toArray();    
+         
+      // now that we have those users, lets remove ones that we are not searching for. 
+         console.log(results3);
+      
+      
+         var _ret = [];
+        _ret.push( results3 );
+      
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { results:_ret, error: error, jwtToken: refreshedToken };
+      
+      res.status(200).json(ret);
+    });
     
 }
 
