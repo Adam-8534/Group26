@@ -669,21 +669,8 @@ exports.setApp = function ( app, client )
     
       var error = '';
     
-      const { userId, search, jwtToken } = req.body;
+      const { userId, search } = req.body;
 
-      try
-      {
-        if( token.isExpired(jwtToken))
-        {
-          var r = {error:'The JWT is no longer valid', jwtToken: ''};
-          res.status(200).json(r);
-          return;
-        }
-      }
-      catch(e)
-      {
-        console.log(e.message);
-      }
       
       var _search = search.trim();
       
@@ -706,17 +693,9 @@ exports.setApp = function ( app, client )
          var _ret = [];
         _ret.push( results3 );
       
-      var refreshedToken = null;
-      try
-      {
-        refreshedToken = token.refresh(jwtToken).accessToken;
-      }
-      catch(e)
-      {
-        console.log(e.message);
-      }
+     
     
-      var ret = { results:_ret, error: error, jwtToken: refreshedToken };
+      var ret = { results:_ret, error: error };
       
       res.status(200).json(ret);
     });
@@ -772,17 +751,8 @@ exports.setApp = function ( app, client )
         console.log(e);
       }
       
-      var refreshedToken = null;
-      try
-      {
-        refreshedToken = token.refresh(jwtToken).accessToken;
-      }
-      catch(e)
-      {
-        console.log(e.message);
-      }
-    
-      var ret = { error: error, jwtToken: refreshedToken }; // results:_ret,
+      
+      var ret = { error: error }; // results:_ret,
       
       res.status(200).json(ret);
     });
@@ -790,6 +760,5 @@ exports.setApp = function ( app, client )
     
     
 }
-
 
 
