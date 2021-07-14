@@ -5,6 +5,8 @@ import './App.css';
 import LoginPage from './pages/LoginPage';
 import RunPage from './pages/RunPage';
 import RegisterPage from './pages/RegisterPage';
+import ConfirmRegisterPage from './pages/ConfirmRegisterPage';
+import FriendsPage from './pages/FriendsPage';
 
 function App() {
   return (
@@ -16,10 +18,16 @@ function App() {
         <Route path="/register" exact>
           <RegisterPage />
         </Route>
+        <Route path="/confirmRegister" exact>
+          <ConfirmRegisterPage />
+        </Route>
         <Route path="/homepage" exact>
           <RunPage />
         </Route>
-        <Redirect to="/" />
+        <Route path="/friends" exact>
+          <FriendsPage />
+        </Route>
+        <Redirect to="" />
       </Switch>  
     </Router>
   );

@@ -17,6 +17,17 @@ const Register = () => {
 
     const doRegister = async event => 
     {
+        if ( registerEmail.value.localeCompare("") == 0 || registerEmail.value.localeCompare("") == 0 ||
+                registerFirstName.value.localeCompare("") == 0 || registerFirstName.value.localeCompare("") == 0 ||
+                registerLastName.value.localeCompare("") == 0 || registerLastName.value.localeCompare("") == 0 ||
+                registerUsername.value.localeCompare("") == 0 || registerUsername.value.localeCompare("") == 0 ||
+                registerPassword.value.localeCompare("") == 0 || registerPassword.value.localeCompare("") == 0)
+        {
+            document.getElementById('returnMessage').innerText = "An input field was left blank";
+            document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
+            return;
+        }
+
         event.preventDefault();
 
         var obj = {email: registerEmail.value, firstname: registerFirstName.value, lastname: registerLastName.value, 
@@ -38,30 +49,23 @@ const Register = () => {
             .then(function (response) 
         {
             var res = response.data;
-            if (res.error) 
+            console.log(res);
+            if ( res.status.localeCompare("All Good") != 0 )
             {
-                setMessage('register error');
+                document.getElementById('returnMessage').innerText = res.status;
+                document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
             }
             else 
             {	
                 console.log("success");
-                // storage.storeToken(res);
-                // var jwt = require('jsonwebtoken');
-    
-                // var ud = jwt.decode(storage.retrieveToken(),{complete:true});
-                // var userId = ud.payload.userId;
-                // var firstName = ud.payload.firstName;
-                // var lastName = ud.payload.lastName;
-                  
-                // var user = {firstName:firstName,lastName:lastName,id:userId};
-                // localStorage.setItem('user_data', JSON.stringify(user));
-                // window.location.href = '/homepage';
-
-                // returnMessage.value = res;
+                
+                window.location.href = '/confirmRegister';
             }
         })
         .catch(function (error) 
         {
+            document.getElementById('returnMessage').innerText = error;
+            document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
             console.log(error);
         });
     }
@@ -79,7 +83,7 @@ const Register = () => {
             <input type="text" className="register-input" id="registerUsername" placeholder="Username" ref={(c) => registerUsername = c} /><br />
             <input type="password" className="register-input" id="registerPassword" placeholder="Password" ref={(c) => registerPassword = c} /><br />
             <input type="submit" id="login-button" className="buttons" value = "Register" onClick={doRegister} /><br />
-            {/* <p id="returnMessage" ref={(c) => returnMessage = c} > </p> */}
+            <p id="returnMessage" ref={(c) => returnMessage = c} ></p>
             {/* <span id="loginResult">{message}</span> */}
         </div>
      );

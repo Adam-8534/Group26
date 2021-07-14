@@ -78,6 +78,10 @@ code {
   border-radius: 4px;
 }
 
+#check-email-confirm {
+  margin-bottom: 10px;
+}
+
 #login-button {
   margin-bottom: 5px;
   margin-top: 10px;
@@ -117,6 +121,23 @@ code {
   margin: 20px auto;
 }
 
+.page-container-flex {
+  display: flex;
+  max-width: 1100px;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 0px 0px 10px 0px;
+  margin: 20px auto;
+}
+
+.side-by-side-container {
+  max-width: 450px;
+  background-color: #f9f9f9;
+  border-radius: 16px;
+  padding: 10px 0px 10px 0px;
+  margin: 0px auto 20px;
+}
+
 .navbar {
   padding: 20px;
   display: flex;
@@ -154,10 +175,50 @@ code {
   color: #17bf33;
 }
 
+.friends-search-add {
+  display: flex;
+  justify-content: center;
+  height: 50px !important;
+  width: 400px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: #f2f2f2;
+  margin-top: 10px;
+}
+
+#add-friend-button {
+  /* top right bottom left */
+  margin: auto 20px auto auto;
+  border-radius: 8px;
+  border-width: 1px;
+}
+
+#add-friend-button:hover {
+  cursor: pointer;
+}
+
+.leaderboard {
+  height: 500px !important;
+  width: 450px;
+}
+
 .homepage-subsection {
   padding: 5px;
   display: flex;
   align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 5px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: rgba(207, 203, 203, 0.959);
+  max-width: 1000px;
+}
+
+.friends-page-subsection {
+  padding: 5px;
+  display: flex;
   text-align: center;
   justify-content: center;
   margin: 0 auto;

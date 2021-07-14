@@ -14,9 +14,9 @@ const RunPageNavbar = () => {
     <nav className="navbar">
       <h1>FREE RUNNER</h1>
       <div className="links">
-        <a href="">Home</a>
+        <a href="/homepage">Home</a>
         <a href="">Runs</a>
-        <a href="">Connect</a>
+        <a href="/friends">Friends</a>
         <a className="logout-button" onClick={doLogout}>Log out</a>
       </div>
     </nav>
