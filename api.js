@@ -131,6 +131,7 @@ exports.setApp = function ( app, client )
     
       const db = client.db();
       const results = await db.collection('Users').find({Login:login}).toArray(); 
+      const verified = results[0].IsVerified; 
 	  // console.log(password);
       // console.log(results[0].Password);
 	  const validPassword = await bcrypt.compare(password,results[0].Password);
@@ -163,6 +164,9 @@ exports.setApp = function ( app, client )
       {
           ret = {error:"Login/Password incorrect"};
       }
+      // check if verified
+      if ( verified == false)
+          res.status(400).json({ error: "Check your email for code to verify your account!" });
 	  if(validPassword){
 		 res.status(200).json(ret);
 	  } else{
@@ -749,7 +753,10 @@ exports.setApp = function ( app, client )
        if ( text.localeCompare( results[0].Key) != 0 )
        {
           console.log('Key does not match!');
+          var r = {error:'Key does not match!'};
+          res.status(200).json(r);
           return;
+      
        }
      
       
@@ -783,5 +790,6 @@ exports.setApp = function ( app, client )
     
     
 }
+
 
 
