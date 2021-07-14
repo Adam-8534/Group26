@@ -165,12 +165,13 @@ exports.setApp = function ( app, client )
           ret = {error:"Login/Password incorrect"};
       }
       // check if verified
-      if ( verified == false)
+      if ( verified == false){
           res.status(400).json({ error: "Check your email for code to verify your account!" });
-	  if(validPassword){
-		 res.status(200).json(ret);
+      }
+      if(validPassword){
+	      res.status(200).json(ret);
 	  } else{
-		 res.status(400).json({ error: "Invalid Password" });
+	    res.status(400).json({ error: "Invalid Password" });
 	  }
     });
     
