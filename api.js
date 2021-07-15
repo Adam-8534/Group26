@@ -141,6 +141,11 @@ exports.setApp = function ( app, client )
       var id = -1;
       var fn = '';
       var ln = '';
+	  let totalruns_ = '';
+	  let totaltime_ = '';
+	  let totaldistance_ = '';
+
+	
 
       var ret;
     
@@ -150,10 +155,21 @@ exports.setApp = function ( app, client )
         fn = results[0].FirstName;
         ln = results[0].LastName;
 
+
+        totalruns_ = "" + results[0].TotalRuns + "";
+        totaltime_ = "" + results[0].TotalTime + "";
+        totaldistance_ = "" + results[0].TotalDistance + ""; 
+
+		  
+	                                                                                                                                                                                                                                                                                                  
+          
+    
+
         try
         {
           const token = require("./createJWT.js");
-          ret = token.createToken( fn, ln, id );
+           ret = {token: token.createToken( fn, ln, id ), totalruns:totalruns_, totaltime:totaltime_, totaldistance :totaldistance_  };
+           // var ret = { results:_ret, error: error, jwtToken: refreshedToken };
         }
         catch(e)
         {
@@ -245,7 +261,8 @@ exports.setApp = function ( app, client )
 	  if (id_check.length > 0)
 	  {
 		  console.log("TAKEN"); 
-		  arraylength = arraylength + 35 + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1) ;
+		  arraylength = Math.floor(arraylength + 35 + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1)) ;
+		  console.log(arraylength); 
 	  }
 
 
