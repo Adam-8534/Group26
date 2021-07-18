@@ -1,7 +1,7 @@
 var token = require('./createJWT.js');
 const bcrypt = require('bcryptjs');
 const sgMail = require("@sendgrid/mail"); 
-sgMail.setApiKey // put new key here 
+sgMail.setApiKey("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"); // put new key here 
 
 
 exports.setApp = function ( app, client )
