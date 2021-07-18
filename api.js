@@ -266,7 +266,7 @@ exports.setApp = function ( app, client )
 	  }
 
 
-      // bcrypt to encrypt password  *** need to do**** 
+      // bcrypt to encrypt password  
       const password = await bcrypt.hash(plainTextPassword, 10)
       
       // lets make an empty friends array.
@@ -747,7 +747,7 @@ exports.setApp = function ( app, client )
      const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
       // check if key matches. 
       console.log(results[0].Key);  
-       if ( text.localeCompare( results[0].Key) != 0 )
+       if ( text.toString().localeCompare( results[0].Key) != 0 )
        {
           console.log('Key does not match!');
           var r = {error:'Key does not match!'};
@@ -774,8 +774,142 @@ exports.setApp = function ( app, client )
       
       res.status(200).json(ret);
     });
+	
+	  app.post('/api/deleteallusers', async (req, res, next) =>
+    {
+      // incoming: userId
+      // outgoing: error
+        
+       // const { userId, jwtToken } = req.body;
+
     
+      // const db = client.db();
+      // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
+      // console.log(deleteRun)
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
     
+      try
+      {
+        const db = client.db();
+        const result = await db.collection('Users').remove({});
+		console.log("Deleted all users!"); 
+		// console.log(result);
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+     
+      var ret = { error: error };
+      
+      res.status(200).json(ret);
+    });
+	
+	  app.post('/api/sendpasswordemail', async (req, res, next) =>
+    {
+  
+        
+      const { email} = req.body;
+
+    
+      var error = '';
+		  
+	  // key 
+      // create key to verify.
+      let passwordkey = Math.floor(Math.random() * (9999 - 1000) + 1000);
+        
+      console.log(passwordkey); 
+	  // SEND CONFIRM EMAIL:
+      
+      const msg = {
+        to: "" + email + "",
+        from: "akbobsmith79@gmail.com",
+        subject: "Password Reset Email",
+        text: " To reset your password Enter this key: "+ passwordkey + "" 
+      };
+      
+      sgMail.send(msg).then(() => {
+      console.log('Message sent')
+      }).catch((error) => {
+      console.log(error.response.body)
+      // console.log(error.response.body.errors[0].message)
+      }) 
+	  
+    
+      try
+      {
+        const db = client.db();
+        const result1 = db.collection('Users').updateOne(
+            { "Email" : email },
+             { $set: { PasswordKey: passwordkey }  },
+			 { upsert: true }
+            ); 
+		console.log("Updated Passoword Key in db. "); 
+		// console.log(result);
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+     
+      var ret = { error: error };
+      
+      res.status(200).json(ret);
+    });
+	
+	 app.post('/api/passwordreset', async (req, res, next) =>
+    {
+	   // enter email of password you are trying to reset. The new password should also be typed in. 
+	   const { email, passkey, newPass } = req.body;
+	   // first we gotta verify the key.
+	
+	   // connect to the db 
+      const db = client.db();
+      // grab user 
+      const results = await db.collection('Users').find( { "Email": email }).toArray(); 
+      // check if key matches. 
+      if ( passkey.toString().localeCompare( results[0].PasswordKey) != 0 )
+       {
+          console.log('Key does not match!');
+          var r = {error:'Key does not match!'};
+          res.status(200).json(r);
+          return;
+      
+       }
+      // encrypt the password using bycrpt. 
+      const password = await bcrypt.hash(newPass, 10)
+		 
+      var error = '';
+    
+      try
+      {
+        // try to update password
+        // update the user !
+        const result1 = db.collection('Users').updateOne(
+            { "Email" : email },
+             {  $set: {"Password": password}  }
+            );
+		console.log("Updated password for user!"); 
+		// console.log(result);
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+     
+      var ret = { error: error };
+      
+      res.status(200).json(ret);
+    });
+	
+	
+	
+	
+  
     
 }
 
