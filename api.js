@@ -13,6 +13,11 @@ exports.setApp = function ( app, client )
       // outgoing: error
         
       const { userId, run, jwtToken } = req.body;
+		
+	  // connect to db
+	  const db = client.db();
+		
+	  let runId = Math.floor( 35 + (Math.random() * (5000 - 1) + 1) + (Math.random() * (5000 - 1) + 1) + (Math.random() * (1000 - 1) + 1) + (Math.random() * (5000 - 1) + 1) + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1) ) ;
 
       try
       {
@@ -30,13 +35,12 @@ exports.setApp = function ( app, client )
        
       var datecreated = new Date().toLocaleString();
     
-      const newRun = {Run:run,UserId:userId, DateCreated:datecreated , Time:0, Distance:0, Pace:0};
+      const newRun = {Run:run,UserId:userId, RunId: runId,  DateCreated:datecreated , Time:0, Distance:0, Pace:0};
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
     
       try
       {
-        const db = client.db();
         const result = db.collection('Runs').insertOne(newRun);
         
         // update the user !
@@ -906,11 +910,29 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });
 	
-	
-	
-	
-  
+	app.post('/api/editRun', async (req, res, next) => 
+    {
+
+      var error = '';
     
+      const { userId, newrunName, runId } = req.body; // have to figure out how to get the runId from front end. 
+
+      // connect to database. 
+      const db = client.db();  
+      // lets update the user  
+      try{
+          db.collection('Runs').updateOne(
+            { "UserId" : userId, "RunId" : runId },
+            { $set: { "Run" : newrunName } }
+            );
+           // console.log(results); 
+      } catch(e){
+        console.log(e);
+      }
+      
+      var ret = { error: error }; 
+      
+      res.status(200).json(ret);
+    });
+	    
 }
-
-
