@@ -58,7 +58,6 @@ const Register = () => {
             else 
             {	
                 console.log("success");
-                
                 window.location.href = '/confirmRegister';
             }
         })

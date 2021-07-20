@@ -40,15 +40,16 @@ const ConfirmRegister = () => {
             .then(function (response) 
         {
             var res = response.data;
-            if ( res[0].localeCompare("All Good") != 0 ) 
+            console.log(res)
+            if ( res.error.localeCompare("") != 0) 
             {
-                document.getElementById('returnMessage').innerText = res[0];
+                document.getElementById('returnMessage').innerText = res.status;
                 document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
             }
             else 
             {	
                 console.log("success");
-                window.location.href = '/homepage';
+                window.location.href = '/login';
             }
         })
         .catch(function (error) 

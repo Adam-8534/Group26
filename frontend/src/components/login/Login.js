@@ -34,13 +34,14 @@ function Login()
             .then(function (response) 
         {
             var res = response.data;
+            console.log(res)
             if (res.error) 
             {
                 setMessage('User/Password combination incorrect');
             }
             else 
             {
-                storage.storeToken(res);
+                storage.storeToken(res.token);
                 var jwt = require('jsonwebtoken');
     
                 var ud = jwt.decode(storage.retrieveToken(),{complete:true});

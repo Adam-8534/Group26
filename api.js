@@ -164,11 +164,6 @@ exports.setApp = function ( app, client )
         totaltime_ = "" + results[0].TotalTime + "";
         totaldistance_ = "" + results[0].TotalDistance + ""; 
 
-		  
-	                                                                                                                                                                                                                                                                                                  
-          
-    
-
         try
         {
           const token = require("./createJWT.js");
@@ -259,15 +254,15 @@ exports.setApp = function ( app, client )
         
       var arraylength = userId_array.length
 	  
-	  // check if a user already has this id, 
-	  const id_check = await db.collection('Users').find({UserId:arraylength + 1}).toArray();
-		// if the array bigger than 0 we need to fix our id. 
-	  if (id_check.length > 0)
-	  {
-		  console.log("TAKEN"); 
-		  arraylength = Math.floor(arraylength + 35 + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1)) ;
-		  console.log(arraylength); 
-	  }
+      // check if a user already has this id, 
+      const id_check = await db.collection('Users').find({UserId:arraylength + 1}).toArray();
+      // if the array bigger than 0 we need to fix our id. 
+      if (id_check.length > 0)
+      {
+        console.log("TAKEN"); 
+        arraylength = Math.floor(arraylength + 35 + (Math.random() * (500 - 1) + 1) + (Math.random() * (500 - 1) + 1)) ;
+        console.log(arraylength); 
+      }
 
 
       // bcrypt to encrypt password  
@@ -306,12 +301,8 @@ exports.setApp = function ( app, client )
         // console.log('User Not created')
         return res.json({ status:'UserName already taken!'})
       }
-      
-      
-      
-        
+
       // SEND CONFIRM EMAIL:
-      
       const msg = {
         to: "" + email + "",
         from: "akbobsmith79@gmail.com",
@@ -325,7 +316,6 @@ exports.setApp = function ( app, client )
       console.log(error.response.body)
       // console.log(error.response.body.errors[0].message)
       }) 
-        
     
       try{
         const new_user = await db.collection('Users').insertOne(newUser);
@@ -337,7 +327,7 @@ exports.setApp = function ( app, client )
         return res.json({ status:'error'})
       }
 
-      res.json({status: 'All Good'}); 
+      res.json({status: 'All Good'});
 
     });
     
@@ -723,49 +713,29 @@ exports.setApp = function ( app, client )
     });
     
     app.post('/api/verifyuser', async (req, res, next) => 
-    {
-      // incoming: userId
-      // outgoing: results[], error
-    
+    {    
       var error = '';
-    
       const { userId, text, jwtToken } = req.body;
-
-      try
-      {
-        if( token.isExpired(jwtToken))
-        {
-          var r = {error:'The JWT is no longer valid', jwtToken: ''};
-          res.status(200).json(r);
-          return;
-        }
-      }
-      catch(e)
-      {
-        console.log(e.message);
-      }
         
       // connect to the db 
       const db = client.db();
       // grab user 
-     const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
+      const results = await db.collection('Users').find( { }).toArray();
       // check if key matches. 
-      console.log(results[0].Key);  
-       if ( text.toString().localeCompare( results[0].Key) != 0 )
-       {
-          console.log('Key does not match!');
-          var r = {error:'Key does not match!'};
-          res.status(200).json(r);
-          return;
-      
-       }
-     
+      console.log(results[results.length - 1].Key);
+      if ( text.toString().localeCompare( results[results.length - 1].Key ) != 0 )
+      {
+        console.log('Key does not match!');
+        var r = {error:'Key does not match!'};
+        res.status(200).json(r);
+        return;
+      }
       
       // lets update the user  
       try{
           // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
           db.collection('Users').updateOne(
-            { "UserId" : userId },
+            { "UserId" : results[results.length - 1].UserId },
             { $set: { "IsVerified" : true  } }
             );
            // console.log(results); 
