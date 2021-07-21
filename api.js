@@ -702,7 +702,7 @@ exports.setApp = function ( app, client )
  
       // Now lets find all these users, or this users friends, and return all that info for front end. 
                                                //    .find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray();
-      const results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : arrayOfNumbers}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();       
+      let results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : arrayOfNumbers}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();       
 	   console.log(results3); 
 		 
 		 // .find( { $and: [ { "UserId": { $in : fill_array}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();    
@@ -711,14 +711,27 @@ exports.setApp = function ( app, client )
        //  console.log(results3);
       
       
-         var _ret = [];
-        _ret.push( results3 );
-      
-     
     
-      var ret = { results:_ret, error: error };
-      
-      res.status(200).json(ret);
+      var _fullNameArray = [];
+      var _userIdArray = [];
+      var _emailArray = []; 
+       // if the array is emptty lets return null instead of an empty array. 
+       if(results3.length == 0)
+       {
+        var ret = { results:null, error: error };
+        res.status(200).json(ret);
+       }
+       if(results3.length > 0)
+       {
+        for( var i=0; i<results3.length; i++ )
+        {
+          _emailArray.push( results3[i].Email);
+          _userIdArray.push( results3[i].UserId);
+          _fullNameArray.push( results3[i].FirstName + ' ' + results3[i].LastName);
+        }
+        var ret = { fullName:_fullNameArray, email:_emailArray, userId:_userIdArray, error: error};
+        res.status(200).json(ret);
+       }
     });
     
     app.post('/api/verifyuser', async (req, res, next) => 
