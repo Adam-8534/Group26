@@ -43,7 +43,7 @@ const ConfirmRegister = () => {
             console.log(res)
             if ( res.error.localeCompare("") != 0) 
             {
-                document.getElementById('returnMessage').innerText = res.status;
+                document.getElementById('returnMessage').innerText = res.error;
                 document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
             }
             else 
