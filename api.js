@@ -645,11 +645,13 @@ exports.setApp = function ( app, client )
     
       // fill arrray with the friends of user. 
       let fill_array = results[0].FriendsArray;
+      var arrayOfNumbers = fill_array.map(Number);
+      console.log(fill_array);
      
  
         
       // Now lets find all these users, or this users friends, and return all that info for front end. 
-      const results3 = await db.collection('Users').find( { UserId: { $in : fill_array}}).toArray(); 
+      const results3 = await db.collection('Users').find( { UserId: { $in : arrayOfNumbers}}).toArray(); 
       
       console.log(results3); 
         var _ret = [];
