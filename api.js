@@ -154,7 +154,16 @@ exports.setApp = function ( app, client )
       var ret;
     
       if( results.length > 0 )
-      {
+      {// lets update the user  
+      try{
+          db.collection('Runs').updateOne(
+            { "UserId" : userId, "RunId" : runId },
+            { $set: { "Run" : newrunName } }
+            );
+           // console.log(results); 
+      } catch(e){
+        console.log(e);
+      }
         id = results[0].UserId;
         fn = results[0].FirstName;
         ln = results[0].LastName;
@@ -690,16 +699,23 @@ exports.setApp = function ( app, client )
          // lets get logged in user 
       const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
     
-      // fill arrray with the friends of user. 
+      // fill arrray with all friends id's. 
       let fill_array = results[0].FriendsArray;
+	  var arrayOfNumbers = fill_array.map(Number);
+
+	  //console.log(fill_array[0]); 
+	  console.log(arrayOfNumbers); 
      
  
       // Now lets find all these users, or this users friends, and return all that info for front end. 
                                                //    .find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray();
-      const results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : fill_array}} , {FullName:{$regex:_search+'.*', $options:'r'}} ] } ).toArray();    
+      const results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : arrayOfNumbers}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();       
+	   console.log(results3); 
+		 
+		 // .find( { $and: [ { "UserId": { $in : fill_array}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();    
          
       // now that we have those users, lets remove ones that we are not searching for. 
-         console.log(results3);
+       //  console.log(results3);
       
       
          var _ret = [];
@@ -889,7 +905,7 @@ exports.setApp = function ( app, client )
 
       // connect to database. 
       const db = client.db();  
-      // lets update the user  
+      // lets update the run  
       try{
           db.collection('Runs').updateOne(
             { "UserId" : userId, "RunId" : runId },
