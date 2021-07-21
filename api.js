@@ -154,16 +154,7 @@ exports.setApp = function ( app, client )
       var ret;
     
       if( results.length > 0 )
-      {// lets update the user  
-      try{
-          db.collection('Runs').updateOne(
-            { "UserId" : userId, "RunId" : runId },
-            { $set: { "Run" : newrunName } }
-            );
-           // console.log(results); 
-      } catch(e){
-        console.log(e);
-      }
+      {
         id = results[0].UserId;
         fn = results[0].FirstName;
         ln = results[0].LastName;
@@ -344,9 +335,9 @@ exports.setApp = function ( app, client )
     {
       // incoming: userId, search
       // outgoing: results[], error
-    
+
       var error = '';
-    
+
       const { userId, search, jwtToken } = req.body;
 
       try
@@ -362,22 +353,24 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
-      
+
       var _search = search.trim();
-      
+
       const db = client.db();
-      const results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
-      // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
-            
-      var _ret = [];
+      const results = await db.collection('Users').find({"FullName":{$regex:_search+'.', $options:'r'}}).toArray();
+      // const results = await Card.find({ "Card": { $regex: _search + '.', $options: 'r' } });
+
+      var _fullNameArray = [];
+      var _userIdArray = [];
+      var _emailArray = [];
+
       for( var i=0; i<results.length; i++ )
       {
-        _ret.push( results[i].Email);
-        _ret.push( results[i].UserId);
-        _ret.push( results[i].FirstName);
-        _ret.push( results[i].LastName);
+        _emailArray.push( results[i].Email);
+        _userIdArray.push( results[i].UserId);
+        _fullNameArray.push( results[i].FirstName + ' ' + results[i].LastName);
       }
-      
+
       var refreshedToken = null;
       try
       {
@@ -387,9 +380,9 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
-    
-      var ret = { results:_ret, error: error, jwtToken: refreshedToken };
-      
+
+      var ret = { fullName:_fullNameArray, email:_emailArray, userId:_userIdArray, error: error, jwtToken: refreshedToken };
+
       res.status(200).json(ret);
     });
     
