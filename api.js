@@ -212,11 +212,12 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+      let _userid = parseInt(userId); 
       
       var _search = search.trim();
       
       const db = client.db();
-      const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'r'} }, { UserId: userId } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'r'} }, { UserId: _userid } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
             
       var _ret = [];
