@@ -16,14 +16,15 @@ function LoggedInName()
   return(
    <div className="homepage-user-profile" id="logged-in-div">
     <h2 id="userName">Welcome, <br /> {firstName} {lastName}</h2>
+    <hr id="user-profile-hr" style={{width: "300px"}} />
     <div className="user-profile-stats">
-      <h4>Runs</h4>
-      <h2> {totalRuns} </h2>
+      <h5>Runs</h5>
+      <h3> {totalRuns} </h3>
     </div>
     <hr id="user-profile-hr" />
     <div className="user-profile-stats">
-      <h4>Friends</h4>
-      <h2> {totalFriends} </h2>
+      <h5>Friends</h5>
+      <h3> {totalFriends} </h3>
     </div>
    </div>
   );

@@ -12,7 +12,7 @@ const RunPageNavbar = () => {
 
   return (
     <nav className="navbar">
-      <h1>FREE RUNNER</h1>
+      <h1 style={{marginBottom: "0px"}}>FREE RUNNER</h1>
       <div className="links">
         <a href="/homepage">Home</a>
         <a href="">Runs</a>
