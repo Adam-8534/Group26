@@ -7,7 +7,7 @@ sgMail.setApiKey("SG.8F2ygPlqQxavyt2xQES_2Q.Z8_Rwm1a0aALiAupu-ToOHmgjGvUHhAnmMDl
 exports.setApp = function ( app, client )
 {
 
-    app.post('/api/addrun', async (req, res, next) =>
+    app.post('/api/addrun', async (req, res, next) => 
     {
       // incoming: userId, color
       // outgoing: error
@@ -34,6 +34,7 @@ exports.setApp = function ( app, client )
       }
        
       var datecreated = new Date().toLocaleString();
+      let _userid = parseInt(userId); 
     
       const newRun = {Run:run,UserId:userId, RunId: runId,  DateCreated:datecreated , Time:0, Distance:0, Pace:0};
       // const newCard = new Card({ Card: card, UserId: userId });
@@ -45,7 +46,7 @@ exports.setApp = function ( app, client )
         
         // update the user !
         const result1 = db.collection('Users').updateOne(
-            { "UserId" : userId },
+            { "UserId" : _userid },
              { $inc: { "TotalRuns": 1 } }
             );  
                 
@@ -73,10 +74,10 @@ exports.setApp = function ( app, client )
     // delete run 
     app.post('/api/deleterun', async (req, res, next) =>
     {
-      // incoming: userId
+      // incoming: run
       // outgoing: error
         
-      const { userId, run, jwtToken } = req.body;
+      const { run, jwtToken } = req.body;
 
       try
       {
@@ -517,6 +518,9 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+
+      let _userid = parseInt(userId); 
+      let _useridtoadd = parseInt(userId_toadd); 
        
      
       // const newCard = new Card({ Card: card, UserId: userId });
@@ -525,7 +529,7 @@ exports.setApp = function ( app, client )
       // connect to db. 
       const db = client.db();
         // check if friend is already added, 
-      const check = await db.collection('Users').find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const check = await db.collection('Users').find( { $and: [ { "UserId": _userid }, { FriendsArray: _useridtoadd  } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
        console.log(check); 
         
        if (Array.isArray(check) && check.length )
@@ -585,6 +589,9 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+
+      let _userid = parseInt(userId); 
+      let _useridtoremove = parseInt(userId_toremove); 
        
      
       // const newCard = new Card({ Card: card, UserId: userId });
@@ -596,8 +603,8 @@ exports.setApp = function ( app, client )
       try
       {
         const result = db.collection('Users').updateOne(
-            { "UserId" : userId },
-            { $pull: { "FriendsArray" : userId_toremove } }
+            { "UserId" : _userid },
+            { $pull: { "FriendsArray" : _useridtoremove } }
             );
         // newCard.save();        
       }
@@ -643,10 +650,12 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+
+      let _userid = parseInt(userId); 
       
       
       const db = client.db();
-      const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
+      const results = await db.collection('Users').find( { "UserId": _userid }).toArray(); 
     
       // fill arrray with the friends of user. 
       let fill_array = results[0].FriendsArray;
@@ -691,13 +700,14 @@ exports.setApp = function ( app, client )
       var error = '';
     
       const { userId, search } = req.body;
+      let _userid = parseInt(userId); 
 
       
       var _search = search.trim();
       
       const db = client.db();
          // lets get logged in user 
-      const results = await db.collection('Users').find( { "UserId": userId }).toArray(); 
+      const results = await db.collection('Users').find( { "UserId": _userid }).toArray(); 
     
       // fill arrray with all friends id's. 
       let fill_array = results[0].FriendsArray;
@@ -746,7 +756,8 @@ exports.setApp = function ( app, client )
     app.post('/api/verifyuser', async (req, res, next) => 
     {    
       var error = '';
-      const { userId, text } = req.body;
+      const {  text } = req.body;
+      
         
       // connect to the db 
       const db = client.db();
@@ -917,13 +928,15 @@ exports.setApp = function ( app, client )
       var error = '';
     
       const { userId, newrunName, runId } = req.body; // have to figure out how to get the runId from front end. 
+      let _userid = parseInt(userId); 
+      let _runid = parseInt(runId); 
 
       // connect to database. 
       const db = client.db();  
       // lets update the run  
       try{
           db.collection('Runs').updateOne(
-            { "UserId" : userId, "RunId" : runId },
+            { "UserId" : _userid, "RunId" : _runid },
             { $set: { "Run" : newrunName } }
             );
            // console.log(results); 
