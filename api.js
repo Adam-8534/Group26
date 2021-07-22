@@ -465,13 +465,14 @@ exports.setApp = function ( app, client )
         console.log(e.message);
       }
       
-      const db = client.db();  
+      const db = client.db();
+      let _fullname = firstname + ' ' + lastname;   
       // lets update the user  
       try{
           // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
           db.collection('Users').updateOne(
             { "UserId" : _userid },
-            { $set: { "FirstName" : firstname , "LastName" : lastname, "Email" : email } }
+            { $set: { "FirstName" : firstname , "LastName" : lastname, "FullName" : _fullname, "Email" : email } }
             );
            // console.log(results); 
       } catch(e){
