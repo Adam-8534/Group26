@@ -739,7 +739,7 @@ exports.setApp = function ( app, client )
     app.post('/api/verifyuser', async (req, res, next) => 
     {    
       var error = '';
-      const { userId, text, jwtToken } = req.body;
+      const { userId, text } = req.body;
         
       // connect to the db 
       const db = client.db();
@@ -809,7 +809,7 @@ exports.setApp = function ( app, client )
     {
   
         
-      const { email} = req.body;
+      const { email } = req.body;
 
     
       var error = '';
@@ -860,14 +860,14 @@ exports.setApp = function ( app, client )
 	
 	 app.post('/api/passwordreset', async (req, res, next) =>
     {
-	   // enter email of password you are trying to reset. The new password should also be typed in. 
-	   const { email, passkey, newPass } = req.body;
+	   // The new password should also be typed in. 
+	   const { passkey, newPass } = req.body;
 	   // first we gotta verify the key.
 	
 	   // connect to the db 
       const db = client.db();
       // grab user 
-      const results = await db.collection('Users').find( { "Email": email }).toArray(); 
+      const results = await db.collection('Users').find( { "PasswordKey": passkey }).toArray(); 
       // check if key matches. 
       if ( passkey.toString().localeCompare( results[0].PasswordKey) != 0 )
        {
@@ -887,8 +887,8 @@ exports.setApp = function ( app, client )
         // try to update password
         // update the user !
         const result1 = db.collection('Users').updateOne(
-            { "Email" : email },
-             {  $set: {"Password": password}  }
+            { "PasswordKey" : passkey },
+             {  $set: {"Password": password }  }
             );
 		console.log("Updated password for user!"); 
 		// console.log(result);
