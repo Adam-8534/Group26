@@ -717,6 +717,7 @@ exports.setApp = function ( app, client )
       var _fullNameArray = [];
       var _userIdArray = [];
       var _emailArray = []; 
+      let _results = [];
        // if the array is emptty lets return null instead of an empty array. 
        if(results3.length == 0)
        {
@@ -727,11 +728,12 @@ exports.setApp = function ( app, client )
        {
         for( var i=0; i<results3.length; i++ )
         {
-          _emailArray.push( results3[i].Email);
-          _userIdArray.push( results3[i].UserId);
-          _fullNameArray.push( results3[i].FirstName + ' ' + results3[i].LastName);
+          // _emailArray.push( results3[i].Email);
+          // _userIdArray.push( results3[i].UserId);
+          // _fullNameArray.push( results3[i].FirstName + ' ' + results3[i].LastName);
+          _results.push(results3[i]); 
         }
-        var ret = { fullName:_fullNameArray, email:_emailArray, userId:_userIdArray, error: error};
+        var ret = { results : _results, error: error}; // fullName:_fullNameArray, email:_emailArray, userId:_userIdArray,
         res.status(200).json(ret);
        }
     });
