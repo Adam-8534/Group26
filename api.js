@@ -407,6 +407,7 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+      let _userid = parseInt(userId); 
     
       // const db = client.db();
       // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
@@ -417,7 +418,7 @@ exports.setApp = function ( app, client )
       try
       {
         const db = client.db();
-        const result = await db.collection('Users').deleteOne({UserId:userId});
+        const result = await db.collection('Users').deleteOne({UserId : _userid});
 		// console.log(result);
       }
       catch(e)
