@@ -449,6 +449,8 @@ exports.setApp = function ( app, client )
     
       const { userId, firstname, lastname, email, jwtToken } = req.body;
 
+      let _userid = parseInt(userId); 
+
       try
       {
         if( token.isExpired(jwtToken))
@@ -468,7 +470,7 @@ exports.setApp = function ( app, client )
       try{
           // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
           db.collection('Users').updateOne(
-            { "UserId" : userId },
+            { "UserId" : _userid },
             { $set: { "FirstName" : firstname , "LastName" : lastname, "Email" : email } }
             );
            // console.log(results); 
