@@ -8,8 +8,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background: rgb(89,120,63);
-  background: radial-gradient(circle, rgba(89,120,63,1) 0%, rgba(67,138,12,1) 49%);
+  background: rgb(9,9,121);
+  background: linear-gradient(90deg, rgba(9,9,121,1) 15%, rgba(0,255,235,1) 100%);
 }
 
 code {
@@ -351,4 +351,8 @@ code {
   font-size: 20px;
   color: #f1356d;
   margin-bottom: 8px;
+}
+
+.map-container{
+  display: block;
 }
