@@ -365,12 +365,11 @@ exports.setApp = function ( app, client )
       var _fullNameArray = [];
       var _userIdArray = [];
       var _emailArray = [];
+      var _resultsarray = [];
 
       for( var i=0; i<results.length; i++ )
       {
-        _emailArray.push( results[i].Email);
-        _userIdArray.push( results[i].UserId);
-        _fullNameArray.push( results[i].FirstName + ' ' + results[i].LastName);
+        _resultsarray.push( results[i]);
       }
 
       var refreshedToken = null;
@@ -733,10 +732,11 @@ exports.setApp = function ( app, client )
       var _userIdArray = [];
       var _emailArray = []; 
       let _results = [];
+      let _emptyarray = [];
        // if the array is emptty lets return null instead of an empty array. 
        if(results3.length == 0)
        {
-        var ret = { results:null, error: error };
+        var ret = { results: _emptyarray, error: error };
         res.status(200).json(ret);
        }
        if(results3.length > 0)
