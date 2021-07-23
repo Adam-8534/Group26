@@ -77,7 +77,9 @@ exports.setApp = function ( app, client )
       // incoming: run
       // outgoing: error
         
-      const { run, jwtToken } = req.body;
+      const { runid, jwtToken } = req.body;
+
+      let _runid = parseInt(runid); 
 
       try
       {
@@ -102,7 +104,7 @@ exports.setApp = function ( app, client )
       try
       {
         const db = client.db();
-        const result = await db.collection('Runs').deleteOne({Run:run});
+        const result = await db.collection('Runs').deleteOne({ RunId : _runid });
 		// console.log(result);
       }
       catch(e)
@@ -220,11 +222,13 @@ exports.setApp = function ( app, client )
       const db = client.db();
       const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'r'} }, { UserId: _userid } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
-            
+
+          
       var _ret = [];
       for( var i=0; i<results.length; i++ )
       {
-        _ret.push( results[i].Run );
+        _ret.push( results[i] );
+        // DateCreated
       }
       
       var refreshedToken = null;
