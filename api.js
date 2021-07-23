@@ -340,7 +340,7 @@ exports.setApp = function ( app, client )
 
       var error = '';
 
-      const { userId, search, jwtToken } = req.body;
+      const {  search, jwtToken } = req.body;
 
       try
       {
@@ -382,7 +382,7 @@ exports.setApp = function ( app, client )
         console.log(e.message);
       }
 
-      var ret = { fullName:_fullNameArray, email:_emailArray, userId:_userIdArray, error: error, jwtToken: refreshedToken };
+      var ret = { results_array : _resultsarray, error: error, jwtToken: refreshedToken }; // fullName:_fullNameArray, email:_emailArray, userId:_userIdArray,
 
       res.status(200).json(ret);
     });
