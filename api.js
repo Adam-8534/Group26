@@ -973,13 +973,15 @@ exports.setApp = function ( app, client )
 	   // The new password should also be typed in. 
 	   const { passkey, newPass } = req.body;
 	   // first we gotta verify the key.
+
+     let _passkey = parseInt(passkey); 
 	
 	   // connect to the db 
       const db = client.db();
       // grab user 
-      const results = await db.collection('Users').find( { "PasswordKey": passkey }).toArray(); 
+      const results = await db.collection('Users').find( { "PasswordKey": _passkey }).toArray(); 
       // check if key matches. 
-      if ( passkey.toString().localeCompare( results[0].PasswordKey) != 0 )
+      if ( _passkey.toString().localeCompare( results[0].PasswordKey) != 0 )
        {
           console.log('Key does not match!');
           var r = {error:'Key does not match!'};
@@ -997,7 +999,7 @@ exports.setApp = function ( app, client )
         // try to update password
         // update the user !
         const result1 = db.collection('Users').updateOne(
-            { "PasswordKey" : passkey },
+            { "PasswordKey" : _passkey },
              {  $set: {"Password": password }  }
             );
 		console.log("Updated password for user!"); 
