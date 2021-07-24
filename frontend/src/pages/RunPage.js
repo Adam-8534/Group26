@@ -5,7 +5,6 @@ import LoggedInName from '../components/homepage/LoggedInName';
 import GettingStarted from '../components/homepage/GettingStarted';
 import GetMobileApp from '../components/homepage/GetMobileApp';
 import MapDemo from '../components/homepage/MapDemo';
-import RunUI from '../components/homepage/RunUI';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/Container'
@@ -33,10 +32,6 @@ const RunPage = () =>
                 </Col>
                 
             </Row>
-            {/* <Row>
-                <RunUI />
-            </Row> */}
-
         </Container>
             
 

@@ -3,6 +3,7 @@ import React from 'react';
 import RunPageNavbar from '../components/homepage/RunPageNavbar';
 import Leaderboard from '../components/friends/Leaderboard';
 import FriendsSection from '../components/friends/FriendsSection';
+import RunUI from '../components/homepage/RunUI';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -26,15 +27,9 @@ const RunPage = () =>
                     <Leaderboard />
                 </Col>
             </Row>
-            
-            {/* <div className="page-container-flex">
-                <div className="side-by-side-container">
-                    <FriendsSection />
-                </div>
-                <div className="side-by-side-container">
-                    <Leaderboard />
-                </div>
-            </div> */}
+            <Row>
+                <RunUI />
+            </Row>
         </Container>
     );
 }

@@ -183,16 +183,7 @@ code {
   color: black;
 }
 
-.friends-search-add {
-  display: flex;
-  justify-content: center;
-  height: 50px !important;
-  width: 400px;
-  border-bottom: 1px solid #f2f2f2;
-  border-radius: 16px;
-  background-color: #f2f2f2;
-  margin-top: 10px;
-}
+
 
 #add-friend-button {
   /* top right bottom left */
@@ -257,6 +248,10 @@ code {
   margin-bottom: 5px;
 }
 
+.deleteAccount {
+  margin-right: auto !important;
+}
+
 /* END User profile login box */
 
 .homepage-map {
@@ -314,6 +309,8 @@ code {
   max-width: 1000px;
 }
 
+/* START friends page */
+
 .friends-page-subsection-leaderboard {
   /* top right bottom left */
   padding: 5px;
@@ -341,6 +338,26 @@ code {
   background-color: #f9f9f9;
   width: 600px;
 }
+
+.friends-search-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 50px !important;
+  width: 400px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: #f2f2f2;
+  margin-top: 10px;
+}
+
+#search-user-input {
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* END friends page */
 
 .search-run-text {
   margin-right: 5px;

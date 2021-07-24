@@ -24,19 +24,24 @@ function LoggedInName()
   let oldPassword = '';
   let newPassword = '';
   let returnMessage;
-
-  const [show, setShow] = useState(false);
+  
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
 
   const handler = () => {
     
     editUser()
     editPassword();
-    handleClose();
+    handleCloseEdit();
     
   }
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleCloseEdit = () => setShowModalEdit(false);
+  const handleShowEdit = () => setShowModalEdit(true);
+  const handleCloseDelete = () => setShowModalDelete(false);
+  const handleShowDelete = () => setShowModalDelete(true);
+
+  const [message,setMessage] = useState('');
 
   const editUser = async event => 
   {
@@ -154,6 +159,56 @@ function LoggedInName()
         console.log(error);
     });
   }
+  
+  const deleteUser = async event => 
+  {
+    event.preventDefault();
+    var tok = storage.retrieveToken();
+    var obj = {userId:userId, jwtToken:tok};
+    var js = JSON.stringify(obj);
+
+    var config = 
+    {
+        method: 'post',
+        url: bp.buildPath('../../../../api/deleteuser'),	
+        headers: 
+        {
+            'Content-Type': 'application/json'
+        },
+        data: js
+    };
+
+    axios(config)
+        .then(function (response) 
+    {
+        var res = response.data;
+        console.log(res)
+        if (res.error) 
+        {
+            setMessage('User/Password combination incorrect');
+        }
+        else 
+        {
+          var res = response.data;
+          var retTok = res.jwtToken;
+  
+          if( res.error.length > 0 )
+          {
+              setMessage( "API Error:" + res.error );
+          }
+          else
+          {
+              setMessage('Your account has been deleted');
+              storage.storeToken( {accessToken:retTok} );
+          }
+          window.location.href = '/';
+        }
+    })
+    .catch(function (error) 
+    {
+        console.log(error);
+    });
+  }
 
   return(
    <div className="homepage-user-profile" id="logged-in-div">
@@ -169,12 +224,12 @@ function LoggedInName()
       <h3> {totalFriends} </h3>
     </div>
     <hr id="user-profile-hr" style={{width: "300px"}} />
-    <Button variant="primary" className="edit-profile-button" onClick={handleShow}>
+    <Button variant="primary" className="edit-profile-button" onClick={handleShowEdit}>
         Edit Account
     </Button>
 
     <div>
-      <Modal dialogClassName="edit-user-modal" show={show} onHide={handleClose}>
+      <Modal dialogClassName="edit-user-modal" show={showModalEdit} onHide={handleCloseEdit}>
         <Modal.Header>
         <Modal.Title>Edit Account</Modal.Title>
         </Modal.Header>
@@ -200,10 +255,33 @@ function LoggedInName()
           <input type="password" className="register-input" id="registerNewPassword" placeholder="New Password" ref={(c) => newPassword = c} />
         </Modal.Body>
         <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        
+        {/* <Button variant="primary" onClick={() => { handleClose(); editUser(); editPassword();}}> */}
+
+        <Button className="deleteAccount" variant="danger" onClick={handleShowDelete}>
+            Delete User
+        </Button>
+        <div className="delete-user-modal">
+          <Modal show={showModalDelete} onHide={handleCloseDelete}>
+            <Modal.Header>
+            <Modal.Title>Delete Account</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>You are about to delete your Account forever 
+              are you sure you want to do this</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseDelete}>
+              No, I wish to Keep.
+            </Button>
+            <Button variant="danger" onClick={handleCloseDelete, deleteUser}>
+              Delete My Account
+            </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+
+        <Button variant="secondary" onClick={handleCloseEdit}>
           Cancel
         </Button>
-        {/* <Button variant="primary" onClick={() => { handleClose(); editUser(); editPassword();}}> */}
         <Button variant="primary" onClick={ handler }>
           Save
         </Button>

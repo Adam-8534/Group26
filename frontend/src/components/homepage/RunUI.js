@@ -95,18 +95,22 @@ function RunUI()
             }
             else
             {
-                var _results = res.results;
+                console.log(res)
+                var runResults = res.results;
                 var resultText = '';
-                for( var i=0; i<_results.length; i++ )
-                {
-                    resultText += _results[i];
-                    if( i < _results.length - 1 )
+
+                runResults.forEach( (runObject, index) => {
+                    if ( (runObject.Run.toLowerCase()).includes( run.value.toLowerCase() ) )
                     {
-                        resultText += ', ';
+                        console.log(runObject.Run)
+                        // resultText += userObject.FullName + '\n';
+                        
                     }
-                }
+                    
+                });
+
                 setResults('Run(s) have been retrieved');
-                setRunList(resultText);
+                // setRunList(resultText);
                 storage.storeToken( {accessToken:retTok} );
             }
         })
@@ -149,14 +153,14 @@ function RunUI()
             }
             else
             {
-                var fullNameResults = res.fullName;
+                var fullNameResults = res.results;
                 var resultText = '';
 
-                fullNameResults.forEach( (fullName, index) => {
-                    if ( (fullName.toLowerCase()).includes( searchUserName.value.toLowerCase() ) )
+                fullNameResults.forEach( (userObject, index) => {
+                    if ( (userObject.FullName.toLowerCase()).includes( searchUserName.value.toLowerCase() ) )
                     {
-                        console.log(fullName)
-                        resultText += fullName + '\n';
+                        console.log(userObject.FullName)
+                        // resultText += userObject.FullName + '\n';
                         
                     }
 
