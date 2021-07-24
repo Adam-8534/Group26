@@ -125,7 +125,7 @@ function RunUI()
         event.preventDefault();
         		
         var tok = storage.retrieveToken();
-        var obj = {userId:userId,search:search.value,jwtToken:tok};
+        var obj = {userId:userId,search:'',jwtToken:tok};
         var js = JSON.stringify(obj);
 
         var config = 

@@ -27,9 +27,9 @@ const RunPage = () =>
                     <Leaderboard />
                 </Col>
             </Row>
-            <Row>
+            {/* <Row>
                 <RunUI />
-            </Row>
+            </Row> */}
         </Container>
     );
 }
