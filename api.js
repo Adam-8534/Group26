@@ -453,18 +453,18 @@ exports.setApp = function ( app, client )
     
       var error = '';
     
-      const { userId, firstname, lastname, email, jwtToken } = req.body;
+      let { userId, firstname, lastname, username, email, jwtToken } = req.body; 
 
       let _userid = parseInt(userId); 
 
       try
       {
-        if( token.isExpired(jwtToken))
+        if( token.isExpired(jwtToken)) 
         {
-          var r = {error:'The JWT is no longer valid', jwtToken: ''};
-          res.status(200).json(r);
-          return;
-        }
+          var r = {error:'The JWT is no longer valid', jwtToken: ''}; 
+          res.status(200).json(r); 
+          return; 
+        } 
       }
       catch(e)
       {
@@ -472,13 +472,32 @@ exports.setApp = function ( app, client )
       }
       
       const db = client.db();
-      let _fullname = firstname + ' ' + lastname;   
+      let _fullname;
+      
+      // gather empty strings 
+      let _user = await db.collection('Users').find( { "UserId": _userid }).toArray();
+
+      if(firstname == null) 
+        firstname = _user[0].FirstName;
+      if(lastname == null)
+        lastname = _user[0].LastName;
+      if(email == null)
+        email = _user[0].Email;
+      if(username == null)
+        username = _user[0].Login;  
+
+      // set _fullname
+      _fullname = firstname + ' ' + lastname;
+      
+      // check database 
+
       // lets update the user  
       try{
+          // 
           // const results = await db.collection('Users').updateOne({ UserId : userId }, { $set : { FirstName: firstname, LastName: lastname, Email: email}}); //.updateOne(UserId:userId, { $set: {FirstName:firstname},{LastName:lastname},{Email:email}}).toArray();
           db.collection('Users').updateOne(
             { "UserId" : _userid },
-            { $set: { "FirstName" : firstname , "LastName" : lastname, "FullName" : _fullname, "Email" : email } }
+            { $set: { "FirstName" : firstname , "LastName" : lastname, "FullName" : _fullname, "Login" : username, "Email" : email } }
             );
            // console.log(results); 
       } catch(e){
@@ -486,6 +505,75 @@ exports.setApp = function ( app, client )
       }
       
  
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+    
+      var ret = { error: error, jwtToken: refreshedToken }; // results:_ret,
+      
+      res.status(200).json(ret);
+    });
+
+    app.post('/api/editPassword', async (req, res, next) => 
+    {
+      // incoming: userId
+      // outgoing: results[], error
+    
+      var error = '';
+    
+      const { userId, exisiting_password, new_password, jwtToken } = req.body; 
+
+      let _userid = parseInt(userId); 
+
+      try
+      {
+        if( token.isExpired(jwtToken)) 
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''}; 
+          res.status(200).json(r); 
+          return; 
+        } 
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+      
+      const db = client.db();
+    
+      // check database if exisiting password matches. 
+      let _passwordcheck = await db.collection('Users').find( { "UserId": _userid }).toArray(); 
+
+      // check with bcrypt compare 
+      const isSamePassword = await bcrypt.compare(exisiting_password,_passwordcheck[0].Password);
+
+      // encrpyt password 
+      let _newPassword = await bcrypt.hash(new_password, 10)
+
+      // if the passwords match, update the database, if not send back error, doesnt match. 
+      if(isSamePassword)
+      {
+        try{
+          db.collection('Users').updateOne(
+            { "UserId" : _userid },
+            { $set: { "Password" : _newPassword } }
+            );
+           // console.log(results); 
+        } catch(e){
+        console.log(e);
+        }
+      }
+      else{
+        var r = {error:'Passwords do not match!'};
+        res.status(200).json(r);
+      }
+
       var refreshedToken = null;
       try
       {
@@ -951,6 +1039,5 @@ exports.setApp = function ( app, client )
       var ret = { error: error }; 
       
       res.status(200).json(ret);
-    });
-	    
+    });   
 }
