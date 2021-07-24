@@ -28,7 +28,7 @@ function LoggedInName()
       });
     });
   return(
-   <div className="homepage-user-profile" id="logged-in-div">
+   <div className="homepage-map" id="logged-in-div">
      
        <Col md = "auto">
             <h5 id="mapbox-header">Area for map demo</h5>

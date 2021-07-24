@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 const RunPageNavbar = () => {
   const doLogout = event => 
@@ -17,7 +18,11 @@ const RunPageNavbar = () => {
         <a href="/homepage">Home</a>
         <a href="">Runs</a>
         <a href="/friends">Friends</a>
-        <a className="logout-button" onClick={doLogout}>Log out</a>
+        
+        <Button className="logout-button" onClick={doLogout}>
+          Log out
+        </Button>
+        {/* <a className="logout-button" onClick={doLogout}>Log out</a> */}
       </div>
     </nav>
   );

@@ -4,8 +4,8 @@ import { Button } from 'react-bootstrap';
 function LoggedInName()
 {
 
-  const goToRuns = () => window.location.href = '/runs';;
-  const goToFriends = () => window.location.href = '/friends';;
+  const goToRuns = () => window.location.href = '/runs';
+  const goToFriends = () => window.location.href = '/friends';
 
   return(
    <div className="homepage-getting-started" id="logged-in-div">

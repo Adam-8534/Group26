@@ -122,11 +122,10 @@ code {
 
 .page-container-flex {
   display: flex;
-  max-width: 1100px;
   background-color: #f9f9f9;
   border-radius: 16px;
   padding: 0px 0px 10px 0px;
-  margin: 20px auto;
+  margin: 30px auto;
 }
 
 .side-by-side-container {
@@ -147,18 +146,24 @@ code {
   background-color: #f9f9f9;
 }
 .navbar h1 {
-  background-color: #454a45;
   padding: 2px;
   border-radius: 8px;
-  color: #17bf33;
+  background: linear-gradient(90deg, rgba(9,9,121,1) 15%, rgba(0,255,235,1) 100%);
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
 }
 .navbar .links {
+  display:flex;
+  align-items:center;
+  height:38px;
   margin-left: auto;
 }
 .navbar .links .logout-button {
   color: white;
-  background-color: #17bf33;
+  background-color: #0d5175;
+  border-color: #0d5175;
   border-radius: 8px;
+  margin-left: 16px;
 }
 .navbar .links .logout-button:hover {
   cursor: pointer;
@@ -167,6 +172,7 @@ code {
 .navbar a {
   margin-left: 16px;
   text-decoration: none;
+  font-size: 20px;
   padding: 6px;
 }
 .navbar a:hover {
@@ -242,7 +248,30 @@ code {
   border-radius: 16px;
 }
 
+.edit-profile-button {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
 /* END User profile login box */
+
+.homepage-map {
+  padding: 5px;
+  display: block;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 5px 30px 0px 0px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  height: 450px;
+}
+
+.map-container{
+  display: block;
+  height: 355px;
+}
 
 .homepage-getting-started {
   padding: 5px;
@@ -281,17 +310,32 @@ code {
   max-width: 1000px;
 }
 
-.friends-page-subsection {
+.friends-page-subsection-leaderboard {
+  /* top right bottom left */
   padding: 5px;
-  display: flex;
+  float: right;
+  display: block;
   text-align: center;
   justify-content: center;
-  margin: 0 auto;
-  margin-top: 5px;
+  margin: 5px 30px 0px 0px;
   border-bottom: 1px solid #f2f2f2;
   border-radius: 16px;
   background-color: #f9f9f9;
-  max-width: 1000px;
+  width: 600px;  
+}
+
+.friends-page-subsection-add-friend {
+  /* top right bottom left */
+  padding: 5px;
+  float: left;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  margin: 5px 0px 0px 30px;
+  border-bottom: 1px solid #f2f2f2;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  width: 600px;
 }
 
 .search-run-text {
@@ -351,8 +395,4 @@ code {
   font-size: 20px;
   color: #f1356d;
   margin-bottom: 8px;
-}
-
-.map-container{
-  display: block;
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
-import { Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 
 function Leaderboard()
@@ -71,7 +71,7 @@ function Leaderboard()
   }
 
   return(
-   <div className="friends-page-subsection leaderboard">
+   <div className="friends-page-subsection-leaderboard leaderboard">
        <div className="">
             <h2>leaderboard</h2>
             <p>Would You like to delete your account?</p>
@@ -89,7 +89,7 @@ function Leaderboard()
                 <Button variant="secondary" onClick={handleClose}>
                   No, I wish to Keep.
                 </Button>
-                <Button variant="primary" onClick={handleClose, deleteUser}>
+                <Button variant="danger" onClick={handleClose, deleteUser}>
                   Delete My Account
                 </Button>
                 </Modal.Footer>
