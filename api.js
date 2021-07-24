@@ -477,13 +477,13 @@ exports.setApp = function ( app, client )
       // gather empty strings 
       let _user = await db.collection('Users').find( { "UserId": _userid }).toArray();
 
-      if(firstname == null) 
+      if(firstname == '') 
         firstname = _user[0].FirstName;
-      if(lastname == null)
+      if(lastname == '')
         lastname = _user[0].LastName;
-      if(email == null)
+      if(email == '')
         email = _user[0].Email;
-      if(username == null)
+      if(username == '')
         username = _user[0].Login;  
 
       // set _fullname
@@ -527,7 +527,7 @@ exports.setApp = function ( app, client )
     
       var error = '';
     
-      const { userId, exisiting_password, new_password, jwtToken } = req.body; 
+      const { userId, existing_password, new_password, jwtToken } = req.body; 
 
       let _userid = parseInt(userId); 
 
@@ -551,7 +551,7 @@ exports.setApp = function ( app, client )
       let _passwordcheck = await db.collection('Users').find( { "UserId": _userid }).toArray(); 
 
       // check with bcrypt compare 
-      const isSamePassword = await bcrypt.compare(exisiting_password,_passwordcheck[0].Password);
+      const isSamePassword = await bcrypt.compare(existing_password,_passwordcheck[0].Password);
 
       // encrpyt password 
       let _newPassword = await bcrypt.hash(new_password, 10)
