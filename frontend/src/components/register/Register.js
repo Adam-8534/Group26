@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 
 const Register = () => {
 
@@ -80,10 +81,11 @@ const Register = () => {
 
             <input type="text" className="register-input" id="registerEmail" placeholder="Email" ref={(c) => registerEmail = c} /><br />
             <input type="text" className="register-input" id="registerUsername" placeholder="Username" ref={(c) => registerUsername = c} /><br />
-            <input type="password" className="register-input" id="registerPassword" placeholder="Password" ref={(c) => registerPassword = c} /><br />
-            <input type="submit" id="login-button" className="buttons" value = "Register" onClick={doRegister} /><br />
+            <input type="password" className="register-input mb-3" id="registerPassword" placeholder="Password" ref={(c) => registerPassword = c} /><br />
+            <Button className="logout-login-register-button mb-2" onClick={doRegister}>
+                Register
+            </Button>
             <p id="returnMessage" ref={(c) => returnMessage = c} ></p>
-            {/* <span id="loginResult">{message}</span> */}
         </div>
      );
 }

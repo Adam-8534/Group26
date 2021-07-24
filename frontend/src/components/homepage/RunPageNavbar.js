@@ -19,7 +19,7 @@ const RunPageNavbar = () => {
         <a href="">Runs</a>
         <a href="/friends">Friends</a>
         
-        <Button className="logout-button" onClick={doLogout}>
+        <Button className="logout-login-register-button" onClick={doLogout}>
           Log out
         </Button>
         {/* <a className="logout-button" onClick={doLogout}>Log out</a> */}

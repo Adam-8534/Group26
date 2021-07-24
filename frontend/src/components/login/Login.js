@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 
 function Login()
 {
@@ -65,8 +66,10 @@ function Login()
             <h1 id="login-title">Welcome to Free Runner</h1>
             <span id="inner-login-title">PLEASE LOGIN</span><br />
             <input type="text" className="login-input" id="loginName" placeholder="Username" ref={(c) => loginName = c}  /><br />
-            <input type="password" className="login-input" id="loginPassword" placeholder="Password" ref={(c) => loginPassword = c} /><br />
-            <input type="submit" id="login-button" className="buttons" value = "Login" onClick={doLogin} />
+            <input type="password" className="login-input mb-3" id="loginPassword" placeholder="Password" ref={(c) => loginPassword = c} /><br />
+            <Button className="logout-login-register-button" onClick={doLogin}>
+                Log in
+            </Button>
             <span id="loginResult">{message}</span>
         </div>
     );

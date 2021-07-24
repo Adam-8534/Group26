@@ -9,7 +9,6 @@ function LoggedInName()
 
   return(
    <div className="homepage-getting-started" id="logged-in-div">
-    {/* <img clasName="image" src={ image }></img> */}
     <div className="getting-started-text-box">
       <h1 id="getting-started-text">Lets get started</h1>
       <h3 style={{color: "#494950"}}>We've listed some ways to begin your journey with Free Runner</h3>
