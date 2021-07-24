@@ -386,7 +386,7 @@ exports.setApp = function ( app, client )
         console.log(e.message);
       }
 
-      var ret = { results_array : _resultsarray, error: error, jwtToken: refreshedToken }; // fullName:_fullNameArray, email:_emailArray, userId:_userIdArray,
+      var ret = { results : _resultsarray, error: error, jwtToken: refreshedToken }; // fullName:_fullNameArray, email:_emailArray, userId:_userIdArray,
 
       res.status(200).json(ret);
     });
@@ -547,8 +547,8 @@ exports.setApp = function ( app, client )
       try
       {
         const result = db.collection('Users').updateOne(
-            { "UserId" : userId },
-            { $push: { "FriendsArray" : userId_toadd } }
+            { "UserId" : _userid },
+            { $push: { "FriendsArray" : _useridtoadd } }
             );
         // newCard.save();        
       }
