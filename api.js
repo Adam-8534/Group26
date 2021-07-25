@@ -12,7 +12,27 @@ exports.setApp = function ( app, client )
       // incoming: userId, color
       // outgoing: error
         
-      const { userId, run, jwtToken } = req.body;
+      const { userId, run, time, distance, coordinates, pace, jwtToken } = req.body;
+
+      // cords stuff
+       var jsonData = JSON.parse(coordinates);
+      console.log(jsonData); 
+
+      function makeArray(d1, d2) {
+        var arr = [];
+        for(let i = 0; i < d2; i++) {
+            arr.push(new Array(d1));
+        }
+        return arr;
+      }
+
+    let cords_array = makeArray(2,jsonData.length); 
+
+    for(var i = 0; i < jsonData.length; i++)
+    {
+        cords_array[i][0] = jsonData[i].longitude;
+        cords_array[i][1] = jsonData[i].latitude; 
+    }
 		
 	  // connect to db
 	  const db = client.db();
@@ -32,24 +52,49 @@ exports.setApp = function ( app, client )
       {
         console.log(e.message);
       }
+
+      console.log(coordinates); 
+      console.log(typeof(coordinates)); 
        
       var datecreated = new Date().toLocaleString();
-      let _userid = parseInt(userId); 
+      let _userid = parseInt(userId);
+      let _time = parseInt(time);
+      let _distance = parseFloat(distance);
     
-      const newRun = {Run:run,UserId:userId, RunId: runId,  DateCreated:datecreated , Time:0, Distance:0, Pace:0};
+      const newRun = {Run:run,UserId:userId, RunId: runId,  DateCreated:datecreated , Time:_time, Distance:_distance, Pace: pace, Coordinates: cords_array };
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
-    
+
+      // update total runs, total distance and total time. 
+      // grab the old that is stored and add it to the current info. 
+      let _oldData = await db.collection('Users').find({UserId : _userid}).toArray();
+      console.log(_oldData)
+
+      // addd it to current data.
+      let _newTotalDistance = _oldData[0].TotalDistance + _distance;
+      let _parsedTotalDistance = parseInt(_newTotalDistance);
+      console.log('Total distance:' + _parsedTotalDistance);
+
+      let _newTotalTime = _oldData[0].TotalTime + _time;
+      let _parsedTotalTime = parseInt(_newTotalTime);
+      console.log('Total Time:' + _parsedTotalTime);
+
+
       try
       {
-        const result = db.collection('Runs').insertOne(newRun);
+        // add the run
+        const result =  db.collection('Runs').insertOne(newRun);
         
-        // update the user !
-        const result1 = db.collection('Users').updateOne(
+        // update total runs. 
+        const result1 = await db.collection('Users').updateOne(
             { "UserId" : _userid },
              { $inc: { "TotalRuns": 1 } }
             );  
-                
+        // update total distance and total time. 
+        const result2 = await db.collection('Users').updateOne(
+            { "UserId" : _userid },
+             { $set : { "TotalDistance": _parsedTotalDistance, "TotalTime": _parsedTotalTime }}
+            );        
       }
       catch(e)
       {
@@ -69,6 +114,16 @@ exports.setApp = function ( app, client )
       var ret = { error: error, jwtToken: refreshedToken };
       
       res.status(200).json(ret);
+    });
+
+    app.post('/api/getcords', async (req, res, next) =>
+    {
+      const db = client.db();
+      let bing =  await db.collection('Runs').find({RunId
+        : 5013}).toArray(); // 
+
+      console.log(bing[0].Coordinates);
+
     });
 
     // delete run 
@@ -1048,3 +1103,5 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });   
 }
+
+
