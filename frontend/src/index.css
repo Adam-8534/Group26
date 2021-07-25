@@ -417,3 +417,19 @@ code {
   color: #f1356d;
   margin-bottom: 8px;
 }
+
+.userList{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.display-users{
+  display: flex;
+  /* text-align: center; */
+  justify-content: right; 
+}
+
+.search-user-buttons{
+  display: right;
+}
