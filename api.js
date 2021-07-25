@@ -390,8 +390,7 @@ exports.setApp = function ( app, client )
 
       res.status(200).json(ret);
     });
-    
-    // delete user NOT WORKING 
+     
     app.post('/api/deleteuser', async (req, res, next) =>
     {
       // incoming: userId
@@ -413,16 +412,22 @@ exports.setApp = function ( app, client )
         console.log(e.message);
       }
       let _userid = parseInt(userId); 
+
+      // connect tot db. 
+      const db = client.db();
     
-      // const db = client.db();
-      // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
-      // console.log(deleteRun)
-      // const newCard = new Card({ Card: card, UserId: userId });
+      // update any users that has them in their friend array. 
+      
+      // check if they have the user id of the soon to be removed user in the friends array
+      db.collection('Users').updateMany(
+        { FriendsArray: _userid},
+        { $pull : {FriendsArray : _userid } }
+         );
+
       var error = '';
     
       try
       {
-        const db = client.db();
         const result = await db.collection('Users').deleteOne({UserId : _userid});
 		// console.log(result);
       }
