@@ -61,7 +61,7 @@ exports.setApp = function ( app, client )
       let _time = parseInt(time);
       let _distance = parseFloat(distance);
     
-      const newRun = {Run:run,UserId:userId, RunId: runId,  DateCreated:datecreated , Time:_time, Distance:_distance, Pace: pace, Coordinates: cords_array };
+      const newRun = {Run:run,UserId:_userId, RunId: runId,  DateCreated:datecreated , Time:_time, Distance:_distance, Pace: pace, Coordinates: cords_array };
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
 
@@ -225,7 +225,7 @@ exports.setApp = function ( app, client )
         try
         {
           const token = require("./createJWT.js");
-           ret = {token: token.createToken( fn, ln, id ), totalruns:totalruns_, totaltime:totaltime_, totaldistance :totaldistance_  };
+           ret = {token: token.createToken( fn, ln, id )}; // , totalruns:totalruns_, totaltime:totaltime_, totaldistance :totaldistance_  
            // var ret = { results:_ret, error: error, jwtToken: refreshedToken };
         }
         catch(e)
@@ -1103,5 +1103,6 @@ exports.setApp = function ( app, client )
       res.status(200).json(ret);
     });   
 }
+
 
 
