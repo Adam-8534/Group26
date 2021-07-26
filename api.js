@@ -72,7 +72,7 @@ exports.setApp = function ( app, client )
 
       // addd it to current data.
       let _newTotalDistance = _oldData[0].TotalDistance + _distance;
-      let _parsedTotalDistance = parseInt(_newTotalDistance);
+      let _parsedTotalDistance = parseFloat(_newTotalDistance);
       console.log('Total distance:' + _parsedTotalDistance);
 
       let _newTotalTime = _oldData[0].TotalTime + _time;
