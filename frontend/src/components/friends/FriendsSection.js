@@ -13,6 +13,7 @@ function FriendsSection()
     const jwt = require("jsonwebtoken");
     
     var search = '';
+    var searchFriend = '';
 
     const [message,setMessage] = useState('');
     const [friendMessage,setFriendMessage] = useState('');
@@ -28,10 +29,16 @@ function FriendsSection()
     var nameList;
     var fullname;
     var userId_toadd;
+    var userId_toremove;
+
+    var friendFullName;
+    let friendTotalDistance;
+    let friendTotalRuns;
+    let friendEmail;
+  
 
     let listFriend = [];
     var friendList;
-    var fullNameFriend;
 
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [showModalView, setShowModalView] = useState(false);
@@ -90,7 +97,16 @@ function FriendsSection()
                 {
                     fullname = fullNameResults[i].FullName;
                     userId_toadd = fullNameResults[i].UserId;
-                    fullNameFriend = fullNameResults[i].FullName;  
+
+                    
+                    friendFullName = fullNameResults[i];
+                    friendTotalDistance = fullNameResults[i].TotalDistance;
+                    friendTotalRuns = fullNameResults[i].TotalRuns;
+                    friendEmail = fullNameResults[i].Email;
+                    
+                    
+                    
+                    
                     if ( (fullname.toLowerCase()).includes( search.value.toLowerCase() ))
                     {
                         resultText += fullname + '\n';
@@ -100,13 +116,12 @@ function FriendsSection()
 
                 }
                 console.log(list);
-                console.log(fullNameFriend);
                 nameList = list.map((element) => <p className="display-users" key = {element.UserId}> {element.FullName} <Button variant="primary" className="search-user-buttons" id="addUserButton"
                 onClick={searchUser, addFriend} > Add Friend </Button></p>); 
 
-                setFriendsViewFN(fullNameFriend);
                 setMessage('User(s) have been retrieved');
                 setRunList(nameList);
+                setFriendsViewFN(friendFullName.FullName);
                 storage.storeToken( {accessToken:retTok} );
             }
         })
@@ -143,7 +158,7 @@ function FriendsSection()
         console.log(res)
         if (res.error) 
         {
-            setMessage('User/Password combination incorrect');
+            setMessage('Already A friend');
         }
         else 
         {
@@ -172,8 +187,9 @@ function FriendsSection()
     {
         event.preventDefault();
         		
-        var tok = storage.retrieveToken();
-        var obj = {userId:userId, search:search.value};
+        
+        var obj = {userId:userId, search:searchFriend.value};
+        
         var js = JSON.stringify(obj);
 
         var config = 
@@ -191,8 +207,10 @@ function FriendsSection()
             .then(function (response) 
         {
             var res = response.data;
-            var retTok = res.jwtToken;
+            console.log(response.data);
+            
 
+            console.log('We are Here' + search.value);
             //console.log(response.data)
     
             if( res.error.length > 0 )
@@ -202,15 +220,28 @@ function FriendsSection()
             else
             {
                 var searchFriendResults = res.results;
+                console.log(res.results);
+                console.log(searchFriendResults);
+
                 var resultFriendText = '';
                 // grabbing this so i can use it later.
-                console.log(searchFriendResults.length)
+                
+
                 for(var i = 0; i < searchFriendResults.length; i++)
                 {
                     var fullnameFriend = searchFriendResults[i].FullName;
+
+                    
+                      friendFullName = searchFriendResults[i].FullName;
+                      friendTotalDistance = searchFriendResults[i].TotalDistance;
+                      friendTotalRuns = searchFriendResults[i].TotalRuns;
+                      friendEmail = searchFriendResults[i].Email;
+                    
+                      
+                    
                     // console.log(fullnameFriend)
-                    userId_toadd = searchFriendResults[i].UserId;  
-                    if ( (fullnameFriend.toLowerCase()).includes( search.value.toLowerCase() ))
+                    userId_toremove = searchFriendResults[i].UserId;  
+                    if ( (fullnameFriend.toLowerCase()).includes( searchFriend.value.toLowerCase() ))
                     {
                         resultFriendText += fullnameFriend + '\n';
                         listFriend[i] = searchFriendResults[i];
@@ -219,14 +250,12 @@ function FriendsSection()
 
                 }
                 console.log("hello");
-                console.log(friendList);
-                storage.storeToken( {accessToken:retTok} );
-                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
-                onClick={searchUser, handleShowView} > View Profile </Button>
-                <Button variant="primary" className="remove-friend-buttons" id="removeFriendButton"
-                onClick={searchUser} > Remove Friend </Button></p>); 
-
                 
+                
+                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
+                onClick={searchFriends, handleShowView } > View Profile </Button></p>); 
+                console.log(friendList);
+                setFriendsViewFN(friendFullName);
                 setFriendMessage('Friend(s) have been retrieved');
                 setFriendsList(friendList);
                 
@@ -239,6 +268,56 @@ function FriendsSection()
         });
         
     };
+
+    const removeFriend = async event => 
+    {
+        event.preventDefault();
+        		
+        var tok = storage.retrieveToken();
+        var obj = {userId:userId, userId_toremove:userId_toremove, jwtToken:tok};
+        var js = JSON.stringify(obj);
+
+        var config = 
+        {
+            method: 'post',
+            url: bp.buildPath('../../../../api/removefriend'),	
+            headers: 
+            {
+                'Content-Type': 'application/json'
+            },
+            data: js
+        };
+        axios(config)
+        .then(function (response) 
+    {
+        var res = response.data;
+        console.log(res)
+        if (res.error) 
+        {
+            setMessage('You can not remove that friend.');
+        }
+        else 
+        {
+          var res = response.data;
+          var retTok = res.jwtToken;
+  
+          if( res.error.length > 0 )
+          {
+              setMessage( "API Error:" + res.error );
+          }
+          else
+          {
+              setMessage('Your friend has been removed');
+              storage.storeToken( {accessToken:retTok} );
+          }
+          
+        }
+    })
+    .catch(function (error) 
+    {
+        console.log(error);
+    });
+    }
 
   return(
    <Container className="friends-page-subsection-add-friend leaderboard">
@@ -254,7 +333,7 @@ function FriendsSection()
         </Col>
         <Col sm={4}>
           <Button variant="primary" className="search-run-buttons" id="addRunButton"
-                onClick={searchUser, handleShowEdit}> Search Friends </Button>
+                onClick={handleShowEdit}> Search Friends </Button>
         </Col>    
      </Row>
        
@@ -270,9 +349,12 @@ function FriendsSection()
           <Modal.Body>
             <p>{friendMessage}</p>
             <input type="text" className="search-friend-input" id="searchFriendFullName" placeholder="Search For a Friend"
-            ref={(c) => search = c} /> <Button variant="primary" className="search-user-buttons" id="addUserButton"
+            ref={(c) => searchFriend = c} /> <Button variant="primary" className="search-friend-buttons" id="addFriendButton"
             onClick={searchFriends} > Search Friend </Button><br />
-            <Col>{friendsList}</Col>
+            <Row>
+              <Col>{friendsList}</Col>
+            </Row>
+            
           </Modal.Body>
           <Modal.Footer>
           <Button className="exit" variant="primary" onClick={handleCloseEdit}>
@@ -280,10 +362,20 @@ function FriendsSection()
           </Button>
           </Modal.Footer>
           <div className="view-profile-modal">
-            <Modal show={showModalView} onHide={handleCloseView}>
+            <Modal dialogClassName="View Profile" show={showModalView} onHide={handleCloseView}>
             <Modal.Header>
-              <Modal.Title>(Friends Name)</Modal.Title>
+              <Modal.Title>View Profile</Modal.Title>
             </Modal.Header>
+
+            <Modal.Body>
+              <p>{friendsViewFN}</p>
+              
+            </Modal.Body>
+            <Modal.Footer>
+            <Button variant="primary" className="save-friend" id="saveFriendButton" onClick={handleCloseView}>Cancel</Button>
+            <Button variant="danger" className="remove-friend-buttons" id="removeFriendButton"
+                onClick={removeFriend} > Remove Friend </Button>
+            </Modal.Footer>
             </Modal>
           </div>
         </Modal>
