@@ -61,7 +61,7 @@ exports.setApp = function ( app, client )
       let _time = parseInt(time);
       let _distance = parseFloat(distance);
     
-      const newRun = {Run:run,UserId:_userId, RunId: runId,  DateCreated:datecreated , Time:_time, Distance:_distance, Pace: pace, Coordinates: cords_array };
+      const newRun = {Run:run,UserId:_userid, RunId: runId,  DateCreated:datecreated , Time:_time, Distance:_distance, Pace: pace, Coordinates: cords_array };
       // const newCard = new Card({ Card: card, UserId: userId });
       var error = '';
 
@@ -83,7 +83,7 @@ exports.setApp = function ( app, client )
       try
       {
         // add the run
-        const result =  db.collection('Runs').insertOne(newRun);
+        const result =  await db.collection('Runs').insertOne(newRun);
         
         // update total runs. 
         const result1 = await db.collection('Users').updateOne(
@@ -332,6 +332,7 @@ exports.setApp = function ( app, client )
       // lets make an empty friends array.
       let friends_array = [];
       let defaultValue = 0;
+      let defaultDistance = 0.00000001;
         
       // create key to verify.
       let key = Math.floor(Math.random() * (9999 - 1000) + 1000);
@@ -342,7 +343,7 @@ exports.setApp = function ( app, client )
       // create a new user 
       const fullname = firstname + ' ' + lastname;
       const newUser = {Email:email, UserId: arraylength + 1, FirstName:firstname, LastName:lastname, FullName:fullname,
-         Login:login, Password:password, TotalRuns:defaultValue, TotalDistance:defaultValue, TotalTime:defaultValue, Key:key, FriendsArray:friends_array, IsVerified:verify }; // add userid UserId:userId
+         Login:login, Password:password, TotalRuns:defaultValue, TotalDistance:defaultDistance, TotalTime:defaultValue, Key:key, FriendsArray:friends_array, IsVerified:verify }; // add userid UserId:userId
 
       
       // check if email is taken,
@@ -429,6 +430,103 @@ exports.setApp = function ( app, client )
       for( var i=0; i<results.length; i++ )
       {
         _resultsarray.push( results[i]);
+      }
+
+      var refreshedToken = null;
+      try
+      {
+        refreshedToken = token.refresh(jwtToken).accessToken;
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+
+      var ret = { results : _resultsarray, error: error, jwtToken: refreshedToken }; // fullName:_fullNameArray, email:_emailArray, userId:_userIdArray,
+
+      res.status(200).json(ret);
+    });
+
+    app.post('/api/searchuserswofriends', async (req, res, next) => 
+    {
+      // incoming: userId, search
+      // outgoing: results[], error
+
+      var error = '';
+
+      const { userId, search, jwtToken } = req.body;
+
+      let _userid = parseInt(userId); 
+
+      try
+      {
+        if( token.isExpired(jwtToken))
+        {
+          var r = {error:'The JWT is no longer valid', jwtToken: ''};
+          res.status(200).json(r);
+          return;
+        }
+      }
+      catch(e)
+      {
+        console.log(e.message);
+      }
+
+      var _search = search.trim();
+
+      const db = client.db();
+      let results12 = await db.collection('Users').find({ "UserId":_userid }).toArray();
+      // console.log(results12); 
+      let friends_array = results12[0].FriendsArray; 
+      let results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
+      // const results = await Card.find({ "Card": { $regex: _search + '.', $options: 'r' } });
+
+      var _resultsarray = [];
+
+
+      let _useridarray = [];
+      for(let i = 0; i < results.length; i++)
+      {
+        _useridarray.push(results[i].UserId);
+      }
+
+      let results1233 = [];
+      
+      // results123 = results.filter(item => item !== $in : friends_array); // .splice(i,1);
+
+  
+      let array1 = _useridarray;
+      let array2 = friends_array;
+      let filteredArray1 = array1.filter(el => !array2.includes(el));
+      console.log(filteredArray1)
+      console.log(friends_array);
+      console.log(array1) 
+      // console.log(_userid)
+
+      let array34 = [];
+      array34.push(_userid); 
+      // console.log(array34)
+      console.log( filteredArray1[0])
+      console.log(_userid)
+      
+
+      for(let i = 0; i < filteredArray1.length; i++)
+      {
+        console.log(i + 'HELLO');
+        if(filteredArray1[i] == _userid)
+        {
+          console.log('we are here')
+          results1233 = filteredArray1.filter(el => !array34.includes(el)); 
+        }
+      }
+     //  console.log(results1233); 
+
+      // the filteredArray now hold the id's of who we want. so we need another db lookup based on this array. 
+      let results12345 = await db.collection('Users').find({ "UserId" : {$in :  results1233} }).toArray();
+
+      for( var i=0; i<results12345.length; i++ )
+      {
+        _resultsarray.push( results12345[i]);
       }
 
       var refreshedToken = null;
@@ -962,6 +1060,38 @@ exports.setApp = function ( app, client )
         const db = client.db();
         const result = await db.collection('Users').remove({});
 		console.log("Deleted all users!"); 
+		// console.log(result);
+      }
+      catch(e)
+      {
+        error = e.toString();
+      }
+    
+     
+      var ret = { error: error };
+      
+      res.status(200).json(ret);
+    });
+
+    app.post('/api/deleteallruns', async (req, res, next) =>
+    {
+      // incoming: userId
+      // outgoing: error
+        
+       // const { userId, jwtToken } = req.body;
+
+    
+      // const db = client.db();
+      // const deleteRun = await db.collection('Runs').find({Run:run}); // might need to add .toarray if not working. 
+      // console.log(deleteRun)
+      // const newCard = new Card({ Card: card, UserId: userId });
+      var error = '';
+    
+      try
+      {
+        const db = client.db();
+        const result = await db.collection('Runs').remove({});
+		    console.log("Deleted all Runs!"); 
 		// console.log(result);
       }
       catch(e)
