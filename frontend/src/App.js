@@ -7,6 +7,8 @@ import RunPage from './pages/RunPage';
 import RegisterPage from './pages/RegisterPage';
 import ConfirmRegisterPage from './pages/ConfirmRegisterPage';
 import FriendsPage from './pages/FriendsPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ForgotPasswordConfirm from './pages/ForgotPasswordConfirmation';
 
 function App() {
   return (
@@ -26,6 +28,12 @@ function App() {
         </Route>
         <Route path="/friends" exact>
           <FriendsPage />
+        </Route>
+        <Route path="/forgotPassword" exact>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path="/forgotPasswordConfirm" exact>
+          <ForgotPasswordConfirm />
         </Route>
         <Redirect to="" />
       </Switch>  

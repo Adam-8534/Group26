@@ -93,7 +93,7 @@ code {
 
 #sign-up-div {
   padding: 5px;
-  display: block;
+  display: flex;
   text-align: center;
   margin: 0 auto;
   border-radius: 16px;

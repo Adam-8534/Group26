@@ -1,8 +1,17 @@
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
 const SignUp = () => {
     return ( 
-        <div id="sign-up-div">
-            <a href="/register" id="sign-up-link">New here? Sign up</a>
-        </div>
+        <Row id="sign-up-div">
+            <Col sm={6}>
+                <a href="/register" id="sign-up-link">New here? Sign up</a>
+            </Col>
+            <Col sm={6}>
+                <a href="/forgotPassword" id="sign-up-link">Forgot password?</a>
+            </Col>
+            
+        </Row>
      );
 }
  
