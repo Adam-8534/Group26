@@ -20,10 +20,10 @@ const RunPage = () =>
             </Row>
 
             <Row>
-                <Col sm={6}>
+                <Col xs={6}>
                     <FriendsSection />
                 </Col>
-                <Col sm={6}>
+                <Col xs={6}>
                     <Leaderboard />
                 </Col>
             </Row>

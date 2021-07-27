@@ -8,7 +8,7 @@ import { Button, Modal } from 'react-bootstrap';
 function FriendsSection()
 {
 
-  var bp = require('../Path.js');
+    var bp = require('../Path.js');
     var storage = require('../../tokenStorage.js');
     const jwt = require("jsonwebtoken");
     
@@ -21,6 +21,10 @@ function FriendsSection()
     const [friendsList,setFriendsList] = useState('');
     
     const [friendsViewFN,setFriendsViewFN] = useState('');
+    const [friendsViewTotalDistance,setFriendsViewTotalDistance] = useState('');
+    const [friendsViewTotalRuns,setFriendsViewTotalRuns] = useState('');
+    const [friendsViewEmail,setFriendsViewEmail] = useState('');
+    const [removeId,setRemoveId] = useState('');
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
@@ -29,9 +33,9 @@ function FriendsSection()
     var nameList;
     var fullname;
     var userId_toadd;
-    var userId_toremove;
+    var userId_toRemove;
 
-    var friendFullName;
+    let friendFullName;
     let friendTotalDistance;
     let friendTotalRuns;
     let friendEmail;
@@ -43,22 +47,40 @@ function FriendsSection()
     const [showModalEdit, setShowModalEdit] = useState(false);
     const [showModalView, setShowModalView] = useState(false);
 
-  // const handler = () => {
-    
-  //   editUser()
-  //   editPassword();
-  //   handleCloseEdit();
-    
-  // }
-
     const handleCloseEdit = () => setShowModalEdit(false);
     const handleShowEdit = () => setShowModalEdit(true);
     const handleCloseView = () => setShowModalView(false);
     const handleShowView = () => setShowModalView(true);
 
+    const addFriendHandler = (userIdToAdd) => {
+      userId_toadd = userIdToAdd
+      addFriend();
+    }
+
+    function removeFriendHandler () {
+      removeFriend();
+      handleCloseView();
+    }
+
+    let viewFriendHandler = (userToShow) => {
+      setRemoveId(userToShow.UserId);
+
+      friendFullName = userToShow.FullName;
+      friendTotalDistance = userToShow.TotalDistance;
+      friendTotalRuns = userToShow.TotalRuns;
+      friendEmail = userToShow.Email;
+
+      setFriendsViewFN(friendFullName)
+      setFriendsViewTotalDistance(friendTotalDistance)
+      setFriendsViewTotalRuns(friendTotalRuns)
+      setFriendsViewEmail(friendEmail)
+
+      handleShowView();
+    }
+
     const searchUser = async event => 
     {
-        event.preventDefault();
+        // event.preventDefault();
         		
         var tok = storage.retrieveToken();
         var obj = {search:search.value,jwtToken:tok};
@@ -96,7 +118,7 @@ function FriendsSection()
                 for(var i = 0; i < fullNameResults.length; i++)
                 {
                     fullname = fullNameResults[i].FullName;
-                    userId_toadd = fullNameResults[i].UserId;
+                    // userId_toadd = fullNameResults[i].UserId;
 
                     
                     friendFullName = fullNameResults[i];
@@ -115,9 +137,11 @@ function FriendsSection()
                     }
 
                 }
+
                 console.log(list);
                 nameList = list.map((element) => <p className="display-users" key = {element.UserId}> {element.FullName} <Button variant="primary" className="search-user-buttons" id="addUserButton"
-                onClick={searchUser, addFriend} > Add Friend </Button></p>); 
+                onClick={() => addFriendHandler(element.UserId)} > Add Friend </Button></p>);
+                console.log(nameList)
 
                 setMessage('User(s) have been retrieved');
                 setRunList(nameList);
@@ -134,60 +158,59 @@ function FriendsSection()
 
     const addFriend = async event => 
     {
-      event.preventDefault();
+      // event.preventDefault();
 
-    var tok = storage.retrieveToken();
-    var obj = {userId:userId, userId_toadd:userId_toadd,  jwtToken:tok};
-    var js = JSON.stringify(obj);
-    console.log(userId_toadd);
-    var config = 
-    {
-        method: 'post',
-        url: bp.buildPath('../../../../api/addfriend'),	
-        headers: 
-        {
-            'Content-Type': 'application/json'
-        },
-        data: js
-    };
+      console.log(userId_toadd)
+      var tok = storage.retrieveToken();
+      var obj = {userId:userId, userId_toadd:userId_toadd,  jwtToken:tok};
+      var js = JSON.stringify(obj)
+      var config = 
+      {
+          method: 'post',
+          url: bp.buildPath('../../../../api/addfriend'),	
+          headers: 
+          {
+              'Content-Type': 'application/json'
+          },
+          data: js
+      };
 
-    axios(config)
-        .then(function (response) 
-    {
-        var res = response.data;
-        console.log(res)
-        if (res.error) 
-        {
-            setMessage('Already A friend');
-        }
-        else 
-        {
+      axios(config)
+          .then(function (response) 
+      {
           var res = response.data;
-          var retTok = res.jwtToken;
-  
-          if( res.error.length > 0 )
+          console.log(res)
+          if (res.error) 
           {
-              setMessage( "API Error:" + res.error );
+              setMessage('Already A friend');
           }
-          else
+          else 
           {
-              setMessage('You have made a new friend!');
-              storage.storeToken( {accessToken:retTok} );
+            var res = response.data;
+            var retTok = res.jwtToken;
+    
+            if( res.error.length > 0 )
+            {
+                setMessage( "API Error:" + res.error );
+            }
+            else
+            {
+                setMessage('You have made a new friend!');
+                storage.storeToken( {accessToken:retTok} );
+            }
+            
           }
-          
-        }
-    })
-    .catch(function (error) 
-    {
-        console.log(error);
-    });
+      })
+      .catch(function (error) 
+      {
+          console.log(error);
+      });
   }
 
   const searchFriends = async event => 
     {
-        event.preventDefault();
-        		
-        
+        // event.preventDefault();
+
         var obj = {userId:userId, search:searchFriend.value};
         
         var js = JSON.stringify(obj);
@@ -232,15 +255,12 @@ function FriendsSection()
                     var fullnameFriend = searchFriendResults[i].FullName;
 
                     
-                      friendFullName = searchFriendResults[i].FullName;
-                      friendTotalDistance = searchFriendResults[i].TotalDistance;
-                      friendTotalRuns = searchFriendResults[i].TotalRuns;
-                      friendEmail = searchFriendResults[i].Email;
+                      
                     
                       
                     
                     // console.log(fullnameFriend)
-                    userId_toremove = searchFriendResults[i].UserId;  
+                    // userId_toremove = searchFriendResults[i].UserId;  
                     if ( (fullnameFriend.toLowerCase()).includes( searchFriend.value.toLowerCase() ))
                     {
                         resultFriendText += fullnameFriend + '\n';
@@ -249,13 +269,15 @@ function FriendsSection()
                     }
 
                 }
-                console.log("hello");
                 
+                // friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
+                // onClick={searchFriends, handleShowView } > View Profile </Button></p>);
+
+                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="float-right view-profile-buttons" id="viewProfileButton"
+                onClick={() => viewFriendHandler(name)} > View Profile </Button></p>);
                 
-                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
-                onClick={searchFriends, handleShowView } > View Profile </Button></p>); 
                 console.log(friendList);
-                setFriendsViewFN(friendFullName);
+                
                 setFriendMessage('Friend(s) have been retrieved');
                 setFriendsList(friendList);
                 
@@ -271,11 +293,12 @@ function FriendsSection()
 
     const removeFriend = async event => 
     {
-        event.preventDefault();
+        // event.preventDefault();
         		
         var tok = storage.retrieveToken();
-        var obj = {userId:userId, userId_toremove:userId_toremove, jwtToken:tok};
+        var obj = {userId:userId, userId_toremove:removeId, jwtToken:tok};
         var js = JSON.stringify(obj);
+        console.log(js)
 
         var config = 
         {
@@ -357,8 +380,8 @@ function FriendsSection()
             
           </Modal.Body>
           <Modal.Footer>
-          <Button className="exit" variant="primary" onClick={handleCloseEdit}>
-            Exit.
+          <Button className="exit" variant="danger" onClick={handleCloseEdit}>
+            Exit
           </Button>
           </Modal.Footer>
           <div className="view-profile-modal">
@@ -368,13 +391,29 @@ function FriendsSection()
             </Modal.Header>
 
             <Modal.Body>
-              <p>{friendsViewFN}</p>
+              <Row>
+                <strong>Name: </strong>
+                <p>{friendsViewFN}</p>
+              </Row>
+              <Row>
+                <strong>Email: </strong>
+                <p>{friendsViewEmail}</p>
+              </Row>
+              <Row>
+                <strong>Total run distance: </strong>
+                <p>{friendsViewTotalDistance}</p>
+              </Row>
+              <Row>
+                <strong>Total runs: </strong>
+                <p>{friendsViewTotalRuns}</p>
+              </Row>
               
             </Modal.Body>
             <Modal.Footer>
             <Button variant="primary" className="save-friend" id="saveFriendButton" onClick={handleCloseView}>Cancel</Button>
+            <p>{userId_toRemove}</p>
             <Button variant="danger" className="remove-friend-buttons" id="removeFriendButton"
-                onClick={removeFriend} > Remove Friend </Button>
+                onClick={removeFriendHandler} > Remove Friend </Button>
             </Modal.Footer>
             </Modal>
           </div>
