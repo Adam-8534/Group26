@@ -72,7 +72,7 @@ function Leaderboard()
             storage.storeToken( {accessToken:retTok} );
           }
           console.log(leaderboardList);
-          list = lL.map((friend, index) => <p className="display-leaderboard" key = {friend.UserId}> {index+1+'.'} {friend.FullName} {friend.TotalDistance} {friend.TotalRuns} </p>);
+          list = lL.map((friend, index) => <p className="display-leaderboard" key = {friend.UserId}> {index+1+'.'} {friend.FullName+' |'+ '| '} {friend.TotalDistance+' |' + '| '} {friend.TotalRuns} </p>);
           console.log(list);
           setLeaderboardLists(list);
         })
@@ -92,6 +92,7 @@ function Leaderboard()
        <div className="">
          
             <h2>Leaderboard</h2>
+            <h5>FullName || Distance(mi) || Runs</h5>
             <Col><h5>{leaderboardLists}</h5></Col>
             
             
