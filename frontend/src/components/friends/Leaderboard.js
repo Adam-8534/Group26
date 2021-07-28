@@ -98,6 +98,11 @@ function Leaderboard()
     listFriend();
   }, [])
 
+
+  // START View Friends Logic section
+
+  // END View Friends Logic section
+
   return(
    <div className="friends-page-subsection-leaderboard leaderboard userSearchList">
       <div className="">

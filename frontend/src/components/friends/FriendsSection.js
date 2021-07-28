@@ -141,7 +141,7 @@ function FriendsSection()
                 console.log(list);
                 nameList = list.map((element) => 
                 
-                <Row className="mb-2">
+                <Row className="friends-search-add mb-2">
                   <Col sm={6}>
                     <p className="display-users" key = {element.UserId}>{element.FullName}</p>
                   </Col>
@@ -370,7 +370,7 @@ function FriendsSection()
       <strong id="users-have-been">{message}</strong>
 
       <Row>
-        <div className="friends-list">
+        <div className="">
           <h3><strong></strong></h3>
           {runList}
         </div>
