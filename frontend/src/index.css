@@ -264,12 +264,12 @@ code {
   border-bottom: 1px solid #f2f2f2;
   border-radius: 16px;
   background-color: #f9f9f9;
-  height: 522px;
+  height: 638px;
 }
 
 .map-container{
   display: block;
-  height: 415px;
+  height: 531px;
 }
 
 .homepage-getting-started {
@@ -462,4 +462,11 @@ code {
 .userSearchList {
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.gravatar-images {
+  border-radius: 16px;
+  border-color: grey;
+  border-style: solid;
+  border-width: 4px;
 }

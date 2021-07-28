@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import { Button, Alert } from 'react-bootstrap';
+import Gravatar from 'react-gravatar'
 
 function LoggedInName()
 {
 
   var bp = require('../Path.js');
   var storage = require('../../tokenStorage.js');
+  const jwt = require("jsonwebtoken");
 
   let _ud = localStorage.getItem('user_data');
   let ud = JSON.parse(_ud);
   let userId = ud.id;
   let firstName = ud.firstName;
   let lastName = ud.lastName;
+  let userFullName = firstName + " " + lastName;
 
   let totalRuns = 0;
   let totalFriends = 0;
@@ -25,6 +28,7 @@ function LoggedInName()
   let newPassword = '';
   let returnMessage;
   
+  const [userEmail,setUserEmail] = useState('');
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -47,6 +51,65 @@ function LoggedInName()
   const handleShowDelete = () => setShowModalDelete(true);
 
   const [message,setMessage] = useState('');
+
+  // searchUser for gravatar
+
+  const searchForEmail = async event => 
+    {
+        // event.preventDefault();
+
+        console.log(userFullName)
+        var tok = storage.retrieveToken();
+        var obj = {search:userFullName, jwtToken: tok};
+        
+        var js = JSON.stringify(obj);
+        console.log(js)
+
+        var config = 
+        {
+            method: 'post',
+            url: bp.buildPath('../../../../api/searchusers'),
+            headers: 
+            {
+                'Content-Type': 'application/json'
+            },
+            data: js
+        };
+
+        
+    
+        axios(config)
+            .then(function (response) 
+        {
+            var res = response.data;
+            console.log(response)
+
+            if( res.error.length > 0 )
+            {
+              console.log("alright")
+                setMessage( "API Error:" + res.error );
+            }
+            else
+            {
+              console.log(res)
+                var searchFriendResults = res.results;
+                console.log(searchFriendResults);
+
+                let email = "";
+                setUserEmail(email)
+                
+            }
+        })
+        .catch(function (error) 
+        {
+            console.log(error);
+        });
+        
+    };
+
+  useEffect(()=>{
+    searchForEmail();
+  }, [])
 
   const editUser = async event => 
   {
@@ -218,6 +281,9 @@ function LoggedInName()
   return(
    <div className="homepage-user-profile" id="logged-in-div">
     <h2 id="userName">Welcome, <br /> {firstName} {lastName}</h2>
+
+    <Gravatar className="gravatar-images mb-3" size={100} email="mathews.kyle@gmail.com" />
+
     <hr id="user-profile-hr" style={{width: "300px"}} />
     <div className="user-profile-stats">
       <h5>Runs</h5>

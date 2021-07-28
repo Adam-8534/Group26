@@ -83,7 +83,7 @@ function FriendsSection()
         // event.preventDefault();
         		
         var tok = storage.retrieveToken();
-        var obj = {userId:userId, search:search.value,jwtToken:tok};
+        var obj = {userId:userId, search:search.value, jwtToken:tok};
         var js = JSON.stringify(obj);
 
         var config = 
@@ -118,16 +118,10 @@ function FriendsSection()
                 for(var i = 0; i < fullNameResults.length; i++)
                 {
                     fullname = fullNameResults[i].FullName;
-                    // userId_toadd = fullNameResults[i].UserId;
-
-                    
                     friendFullName = fullNameResults[i];
                     friendTotalDistance = fullNameResults[i].TotalDistance;
                     friendTotalRuns = fullNameResults[i].TotalRuns;
                     friendEmail = fullNameResults[i].Email;
-                    
-                    
-                    
                     
                     if ( (fullname.toLowerCase()).includes( search.value.toLowerCase() ))
                     {

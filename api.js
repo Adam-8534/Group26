@@ -275,7 +275,7 @@ exports.setApp = function ( app, client )
       var _search = search.trim();
       
       const db = client.db();
-      const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'r'} }, { UserId: _userid } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Runs').find( { $and: [ { Run: {$regex:_search+'.*', $options:'i'} }, { UserId: _userid } ] } ).toArray(); // .find({"Run":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.*', $options: 'r' } });
 
           
@@ -419,7 +419,7 @@ exports.setApp = function ( app, client )
       var _search = search.trim();
 
       const db = client.db();
-      const results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
+      const results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'i'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.', $options: 'r' } });
 
       var _fullNameArray = [];
@@ -476,10 +476,12 @@ exports.setApp = function ( app, client )
 
       const db = client.db();
       let results12 = await db.collection('Users').find({ "UserId":_userid }).toArray();
-      console.log(results12); 
+      // console.log(results12);
       let friends_array = results12[0].FriendsArray; 
-      let results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
+      let results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'i'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.', $options: 'r' } });
+
+      console.log(results)
 
       var _resultsarray = [];
 
@@ -499,27 +501,29 @@ exports.setApp = function ( app, client )
       let array2 = friends_array;
       let filteredArray1 = array1.filter(el => !array2.includes(el));
       console.log(filteredArray1)
-      console.log(friends_array);
-      console.log(array1) 
+      // console.log(friends_array);
+      // console.log(array1) 
       // console.log(_userid)
 
       let array34 = [];
       array34.push(_userid); 
       // console.log(array34)
-      console.log( filteredArray1[0])
-      console.log(_userid)
+      // console.log( filteredArray1[0])
+      // console.log(_userid)
       
 
       for(let i = 0; i < filteredArray1.length; i++)
       {
-        console.log(i + 'HELLO');
         if(filteredArray1[i] == _userid)
         {
-          console.log('we are here')
           results1233 = filteredArray1.filter(el => !array34.includes(el)); 
         }
+        else
+        {
+          results1233.push(filteredArray1[i])
+        }
       }
-     //  console.log(results1233); 
+      console.log(results1233); 
 
       // the filteredArray now hold the id's of who we want. so we need another db lookup based on this array. 
       let results12345 = await db.collection('Users').find({ "UserId" : {$in :  results1233} }).toArray();
@@ -909,14 +913,14 @@ exports.setApp = function ( app, client )
       // fill arrray with the friends of user. 
       let fill_array = results[0].FriendsArray;
       var arrayOfNumbers = fill_array.map(Number);
-      console.log(fill_array);
+      // console.log(fill_array);
      
  
         
       // Now lets find all these users, or this users friends, and return all that info for front end. 
       const results3 = await db.collection('Users').find( { UserId: { $in : arrayOfNumbers}}).toArray(); 
       
-      console.log(results3); 
+      // console.log(results3); 
         var _ret = [];
         _ret.push( results3 );
         
@@ -968,7 +972,7 @@ exports.setApp = function ( app, client )
  
       // Now lets find all these users, or this users friends, and return all that info for front end. 
                                                //    .find( { $and: [ { "UserId": userId }, { FriendsArray:userId_toadd  } ] } ).toArray();
-      let results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : arrayOfNumbers}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();       
+      let results3 = await db.collection('Users').find( { $and: [ { "UserId": { $in : arrayOfNumbers}} , {"FullName" : {$regex: _search +'.*', $options:'i'}} ] } ).toArray();       
 	   console.log(results3); 
 		 
 		 // .find( { $and: [ { "UserId": { $in : fill_array}} , {"FullName" : {$regex: _search +'.*', $options:'r'}} ] } ).toArray();    
