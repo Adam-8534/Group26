@@ -443,7 +443,6 @@ code {
 .display-users{
   /* top right bottom left */
   display: block;
-  /* text-align: center; */
   margin: 0px 20px 5px 0px;
   justify-content: right; 
 }

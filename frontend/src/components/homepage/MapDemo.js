@@ -144,7 +144,7 @@ function LoggedInName()
    <div className="homepage-map" id="logged-in-div">
      
        <Col md = "auto">
-            <h5 id="mapbox-header">Area for map demo</h5>
+            <h5 id="mapbox-header">Check out our interactive map</h5>
             <div ref={mapContainer} className="map-container" />
        </Col>
        
