@@ -15,15 +15,6 @@ function LoggedInName()
     </div>
     <hr />
     <div className="getting-started-text-box">
-      <h2 id="getting-started-text">Go for your first run</h2>
-      <h4 style={{color: "#494950"}}>Head over to our Runs page to start your workout. 
-        Seemlessly upload your workouts directly to Free Runner!</h4>
-      <Button variant="primary" onClick={goToRuns} style={{marginTop: "5px"}}>
-        Start Running
-      </Button>
-
-    </div>
-    <div className="getting-started-text-box">
       <h2 id="getting-started-text">Connect with friends</h2>
       <h4 style={{color: "#494950"}}>Add your family, co-workers, or randoms to compete with over on our leaderboards! </h4>
       <Button variant="primary" onClick={goToFriends} style={{marginTop: "5px"}}>

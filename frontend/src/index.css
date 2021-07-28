@@ -91,6 +91,7 @@ code {
   margin-bottom: 0px;
 }
 
+
 #sign-up-div {
   padding: 5px;
   display: flex;
@@ -253,7 +254,6 @@ code {
 }
 
 /* END User profile login box */
-
 .homepage-map {
   padding: 5px;
   display: block;
@@ -264,12 +264,16 @@ code {
   border-bottom: 1px solid #f2f2f2;
   border-radius: 16px;
   background-color: #f9f9f9;
-  height: 450px;
+  height: 522px;
+}
+
+#leaderboard-titles {
+  text-decoration: underline;
 }
 
 .map-container{
   display: block;
-  height: 355px;
+  height: 415px;
 }
 
 .homepage-getting-started {
@@ -329,7 +333,7 @@ code {
   /* top right bottom left */
   padding: 5px;
   float: left;
-  display: flex;
+  display: block;
   text-align: center;
   justify-content: center;
   margin: 5px 0px 0px 30px;
@@ -340,7 +344,7 @@ code {
 }
 
 .friends-search-add {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -350,6 +354,23 @@ code {
   border-radius: 16px;
   background-color: #f2f2f2;
   margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#users-have-been {
+  margin-bottom: 5px;
+}
+
+#search-friends-container {
+  margin-top: 10px;
+  vertical-align: bottom;
+  position: fixed;
+}
+
+.friends-list {
+  padding-top: 8px;
+  border-radius: 16px;
+  background-color: #f2f2f2;
 }
 
 #search-user-input {
@@ -425,11 +446,21 @@ code {
 }
 
 .display-users{
-  display: flex;
+  /* top right bottom left */
+  display: block;
   /* text-align: center; */
+  margin: 0px 20px 5px 0px;
   justify-content: right; 
 }
 
 .search-user-buttons{
   display: right;
+}
+
+.view-profile-buttons {
+  float: right;
+}
+
+.userSearchList {
+  overflow-y: auto;
 }

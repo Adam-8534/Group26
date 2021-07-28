@@ -16,7 +16,7 @@ const RunPageNavbar = () => {
       <h1 style={{marginBottom: "0px"}}>FREE RUNNER</h1>
       <div className="links">
         <a href="/homepage">Home</a>
-        <a href="">Runs</a>
+        {/* <a href="">Runs</a> */}
         <a href="/friends">Friends</a>
         
         <Button className="logout-login-register-button" onClick={doLogout}>

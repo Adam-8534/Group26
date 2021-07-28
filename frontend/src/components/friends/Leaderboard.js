@@ -58,21 +58,33 @@ function Leaderboard()
             
             for (var i = 0; i < leaderboardList.length; i++)
             {
-              if (i < 10)
-                var lL = leaderboardList[i]
+              var lL = leaderboardList[i]
             }
 
             lL.sort(function(a, b){
               return  b.TotalDistance - a.TotalDistance ;
             });
             
-            
-            
-            console.log('hello.........');
             storage.storeToken( {accessToken:retTok} );
           }
           console.log(leaderboardList);
-          list = lL.map((friend, index) => <p className="display-leaderboard" key = {friend.UserId}> {index+1+'.'} {friend.FullName+' |'+ '| '} {friend.TotalDistance+' |' + '| '} {friend.TotalRuns} </p>);
+          list = lL.map((friend, index) => 
+          <Row className="display-leaderboard" key = {friend.UserId}>
+            <Col sm={3}>
+              <p>{index+1+'.'}</p>
+            </Col>
+            <Col sm={3}>
+              {friend.FullName}
+            </Col>
+            <Col sm={3}>
+              {friend.TotalDistance.toLocaleString(undefined, {minimumFractionDigits: 2})}
+            </Col>
+            <Col sm={3}>
+              {friend.TotalRuns}
+            </Col>
+          </Row>
+          // <p className="display-leaderboard" key = {friend.UserId}> {index+1+'.'} {friend.FullName+' |'+ '| '} {friend.TotalDistance+' |' + '| '} {friend.TotalRuns} </p>
+          );
           console.log(list);
           setLeaderboardLists(list);
         })
@@ -92,8 +104,26 @@ function Leaderboard()
        <div className="">
          
             <h2>Leaderboard</h2>
-            <h5>FullName || Distance(mi) || Runs</h5>
-            <Col><h5>{leaderboardLists}</h5></Col>
+            {/* <h5>FullName || Distance(mi) || Runs</h5> */}
+            <Row>
+              <Col sm={3}>
+              <h5>Position</h5>
+              </Col>
+              <Col sm={3}>
+              <h5>FullName</h5>
+              </Col>
+              <Col sm={3}>
+              <h5>Distance(mi)</h5>
+              </Col>
+              <Col sm={3}>
+              <h5>Runs</h5>
+              </Col>
+            </Row>
+            <hr id="user-profile-hr" style={{width: "560px"}} />
+            <Row>
+              <h5>{leaderboardLists}</h5>
+            </Row>
+            {/* <Col></Col> */}
             
             
             

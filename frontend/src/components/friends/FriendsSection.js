@@ -83,13 +83,13 @@ function FriendsSection()
         // event.preventDefault();
         		
         var tok = storage.retrieveToken();
-        var obj = {search:search.value,jwtToken:tok};
+        var obj = {userId:userId, search:search.value,jwtToken:tok};
         var js = JSON.stringify(obj);
 
         var config = 
         {
             method: 'post',
-            url: bp.buildPath('../../../../api/searchusers'),	
+            url: bp.buildPath('../../../../api/searchuserswofriends'),	
             headers: 
             {
                 'Content-Type': 'application/json'
@@ -139,8 +139,19 @@ function FriendsSection()
                 }
 
                 console.log(list);
-                nameList = list.map((element) => <p className="display-users" key = {element.UserId}> {element.FullName} <Button variant="primary" className="search-user-buttons" id="addUserButton"
-                onClick={() => addFriendHandler(element.UserId)} > Add Friend </Button></p>);
+                nameList = list.map((element) => 
+                
+                <Row className="mb-2">
+                  <Col sm={6}>
+                    <p className="display-users" key = {element.UserId}>{element.FullName}</p>
+                  </Col>
+                  <Col sm={6}>
+                     <Button variant="primary" className="ml-5 search-user-buttons" id="addUserButton"
+                     onClick={() => addFriendHandler(element.UserId)} > Add Friend </Button>
+                  </Col>
+                </Row>
+                );
+                 
                 console.log(nameList)
 
                 setMessage('User(s) have been retrieved');
@@ -273,7 +284,7 @@ function FriendsSection()
                 // friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
                 // onClick={searchFriends, handleShowView } > View Profile </Button></p>);
 
-                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="float-right view-profile-buttons" id="viewProfileButton"
+                friendList = listFriend.map((name) => <p className="display-friends" key = {name.UserId}> {name.FullName} <Button variant="primary" className="view-profile-buttons" id="viewProfileButton"
                 onClick={() => viewFriendHandler(name)} > View Profile </Button></p>);
                 
                 console.log(friendList);
@@ -343,26 +354,44 @@ function FriendsSection()
     }
 
   return(
-   <Container className="friends-page-subsection-add-friend leaderboard">
-     <p>{message}</p>
-     <Row className="friends-search-add">
-        <Col sm={8}>
-          <input type="text" id="search-user-input" id="run-text" placeholder="Search user" 
-                ref={(c) => search = c} />
-        </Col>
-        <Col sm={4}>
-          <Button variant="primary" className="search-run-buttons" id="addRunButton"
-                onClick={searchUser}> Search User </Button>
-        </Col>
-        <Col sm={4}>
-          <Button variant="primary" className="search-run-buttons" id="addRunButton"
-                onClick={handleShowEdit}> Search Friends </Button>
-        </Col>    
-     </Row>
-       
-     <Row>
-          <Col >{runList} </Col>
-     </Row>
+   <Container className="friends-page-subsection-add-friend leaderboard userSearchList">
+      <Row className="friends-search-add">
+          <Col sm={6}>
+            <input type="text" id="search-user-input" id="run-text" placeholder="Search user" 
+                  ref={(c) => search = c} />
+          </Col>
+          <Col sm={6}>
+            <Button variant="primary" className="search-run-buttons" id="addRunButton"
+                  onClick={searchUser}>Search User</Button>
+            
+          </Col>
+          {/* <Col sm={4}>
+                <Button variant="primary" className="search-run-buttons" id="addRunButton"
+                      onClick={handleShowEdit}>Search Friends</Button>  
+          </Col>   */}
+      </Row>
+
+      <strong id="users-have-been">{message}</strong>
+
+      <Row>
+        <div className="friends-list">
+          <h3><strong></strong></h3>
+          {runList}
+        </div>
+      </Row>
+
+      <Row className="friends-search-add" id="search-friends-container">
+          <Col sm={5}>
+            <Button variant="primary" className="search-run-buttons" id="addRunButton"
+                      onClick={handleShowEdit}>Search Friends</Button>       
+          </Col>
+          <Col sm={7}>   
+          </Col>
+
+
+      </Row>
+      
+
        
       <div>
         <Modal dialogClassName="Search Friends" show={showModalEdit} onHide={handleCloseEdit}>
@@ -371,7 +400,7 @@ function FriendsSection()
           </Modal.Header>
           <Modal.Body>
             <p>{friendMessage}</p>
-            <input type="text" className="search-friend-input" id="searchFriendFullName" placeholder="Search For a Friend"
+            <input type="text" className="search-friend-input mb-3" id="searchFriendFullName" placeholder="Search For a Friend"
             ref={(c) => searchFriend = c} /> <Button variant="primary" className="search-friend-buttons" id="addFriendButton"
             onClick={searchFriends} > Search Friend </Button><br />
             <Row>

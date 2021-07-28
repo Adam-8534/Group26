@@ -14,7 +14,7 @@ const ConfirmRegister = () => {
 
     const doRegisterConfirm = async event => 
     {
-        if ( registerCode.value.localeCompare("") == 0 || registerCode.value.localeCompare("") == 0 )
+        if ( registerCode.value.localeCompare("") == 0 || registerCode.value.localeCompare(" ") == 0 )
         {
             document.getElementById('returnMessage').innerText = "Please input the emailed code!";
             document.getElementById('returnMessage').style = "color: red; font-weight: bold;";

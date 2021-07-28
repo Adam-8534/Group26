@@ -476,7 +476,7 @@ exports.setApp = function ( app, client )
 
       const db = client.db();
       let results12 = await db.collection('Users').find({ "UserId":_userid }).toArray();
-      // console.log(results12); 
+      console.log(results12); 
       let friends_array = results12[0].FriendsArray; 
       let results = await db.collection('Users').find({"FullName":{$regex:_search+'.*', $options:'r'}}).toArray();
       // const results = await Card.find({ "Card": { $regex: _search + '.', $options: 'r' } });

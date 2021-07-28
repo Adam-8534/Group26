@@ -7,7 +7,9 @@ const SignUp = () => {
             <Col sm={6}>
                 <a href="/register" id="sign-up-link">New here? Sign up</a>
             </Col>
-            <Col sm={6}>
+            <Col sm={1}>
+            </Col>
+            <Col sm={5}>
                 <a href="/forgotPassword" id="sign-up-link">Forgot password?</a>
             </Col>
             

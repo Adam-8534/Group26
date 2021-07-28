@@ -1,8 +1,11 @@
+import React from 'react';
+import Row from 'react-bootstrap/Row'
+
 const BackToLogin = () => {
     return ( 
-        <div id="sign-up-div">
-            <a href="/" id="sign-up-link">Have an account? Login</a>
-        </div>
+        <Row id="sign-up-div">
+            <a href="/" id="sign-up-link">Back to login</a>
+        </Row>
      );
 }
  
