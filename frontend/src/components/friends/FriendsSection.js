@@ -358,17 +358,13 @@ function FriendsSection()
       <Row className="friends-search-add">
           <Col sm={6}>
             <input type="text" id="search-user-input" id="run-text" placeholder="Search user" 
-                  ref={(c) => search = c} />
+                  ref={(c) => search = c} style={{width: "300px", marginLeft: "10px"}} />
           </Col>
           <Col sm={6}>
             <Button variant="primary" className="search-run-buttons" id="addRunButton"
                   onClick={searchUser}>Search User</Button>
             
           </Col>
-          {/* <Col sm={4}>
-                <Button variant="primary" className="search-run-buttons" id="addRunButton"
-                      onClick={handleShowEdit}>Search Friends</Button>  
-          </Col>   */}
       </Row>
 
       <strong id="users-have-been">{message}</strong>
@@ -381,14 +377,10 @@ function FriendsSection()
       </Row>
 
       <Row className="friends-search-add" id="search-friends-container">
-          <Col sm={5}>
+          <Col sm={9}>
             <Button variant="primary" className="search-run-buttons" id="addRunButton"
                       onClick={handleShowEdit}>Search Friends</Button>       
           </Col>
-          <Col sm={7}>   
-          </Col>
-
-
       </Row>
       
 

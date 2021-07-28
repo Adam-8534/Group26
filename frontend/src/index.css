@@ -267,10 +267,6 @@ code {
   height: 522px;
 }
 
-#leaderboard-titles {
-  text-decoration: underline;
-}
-
 .map-container{
   display: block;
   height: 415px;
@@ -364,7 +360,6 @@ code {
 #search-friends-container {
   margin-top: 10px;
   vertical-align: bottom;
-  position: fixed;
 }
 
 .friends-list {
@@ -453,6 +448,10 @@ code {
   justify-content: right; 
 }
 
+#refresh-list {
+  float: right;
+}
+
 .search-user-buttons{
   display: right;
 }
@@ -463,4 +462,5 @@ code {
 
 .userSearchList {
   overflow-y: auto;
+  overflow-x: hidden;
 }

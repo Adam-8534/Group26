@@ -70,10 +70,10 @@ function Leaderboard()
           console.log(leaderboardList);
           list = lL.map((friend, index) => 
           <Row className="display-leaderboard" key = {friend.UserId}>
-            <Col sm={3}>
-              <p>{index+1+'.'}</p>
+            <Col sm={2}>
+              <p style={{marginLeft: "10px"}}>{index+1+'.'}</p>
             </Col>
-            <Col sm={3}>
+            <Col sm={4}>
               {friend.FullName}
             </Col>
             <Col sm={3}>
@@ -97,38 +97,41 @@ function Leaderboard()
   useEffect(()=>{
     listFriend();
   }, [])
-  
 
   return(
-   <div className="friends-page-subsection-leaderboard leaderboard">
-       <div className="">
-         
-            <h2>Leaderboard</h2>
-            {/* <h5>FullName || Distance(mi) || Runs</h5> */}
-            <Row>
-              <Col sm={3}>
-              <h5>Position</h5>
-              </Col>
-              <Col sm={3}>
-              <h5>FullName</h5>
-              </Col>
-              <Col sm={3}>
-              <h5>Distance(mi)</h5>
-              </Col>
-              <Col sm={3}>
-              <h5>Runs</h5>
-              </Col>
-            </Row>
-            <hr id="user-profile-hr" style={{width: "560px"}} />
-            <Row>
-              <h5>{leaderboardLists}</h5>
-            </Row>
-            {/* <Col></Col> */}
-            
-            
-            
+   <div className="friends-page-subsection-leaderboard leaderboard userSearchList">
+      <div className="">
+        
+          <Row>
+            <Col>
+            <h2 style={{float: "left", marginLeft: "10px", marginBottom: "3px"}}>Leaderboard</h2>
+            <hr id="user-profile-hr" style={{width: "220px", float: "left", marginLeft: "4px", marginBottom: "15px"}} />
+            </Col>
+            <Col>
+              <Button variant="primary" className="search-run-buttons" id="refresh-list" style={{marginRight: "10px"}}
+                      onClick={listFriend}>Refresh list</Button>
+            </Col>
+          </Row>
 
-       </div>
+          <Row>
+            <Col sm={2}>
+            <h5 style={{marginLeft: "10px"}}>Position</h5>
+            </Col>
+            <Col sm={4}>
+            <h5>FullName</h5>
+            </Col>
+            <Col sm={3}>
+            <h5>Distance(mi)</h5>
+            </Col>
+            <Col sm={3}>
+            <h5>Runs</h5>
+            </Col>
+          </Row>
+          <hr id="user-profile-hr" style={{width: "560px"}} />
+          <Row>
+            <h5>{leaderboardLists}</h5>
+          </Row>
+      </div>
    </div>
   );
 
