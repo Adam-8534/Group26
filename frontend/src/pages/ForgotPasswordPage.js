@@ -12,13 +12,14 @@ const ConfirmRegisterPage = () =>
   var storage = require('../tokenStorage.js');
   const jwt = require("jsonwebtoken");
 
+  let returnMessage = '';
   let userEmail;
 
   const sendPasswordResetEmail = async event => 
   {
       if ( userEmail.value.localeCompare("") == 0 || userEmail.value.localeCompare(" ") == 0 )
       {
-          document.getElementById('returnMessage').innerText = "Please input the emailed code!";
+          document.getElementById('returnMessage').innerText = "Please input your email!";
           document.getElementById('returnMessage').style = "color: red; font-weight: bold;";
           return;
       }
@@ -75,6 +76,7 @@ const ConfirmRegisterPage = () =>
             <Button className="logout-login-register-button mb-4" onClick={sendPasswordResetEmail} >
                 Send code
             </Button>
+            <p id="returnMessage" ref={(c) => returnMessage = c} ></p>
         </div>
         <BackToLogin />
       </div>

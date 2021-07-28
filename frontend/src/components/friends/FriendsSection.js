@@ -355,13 +355,21 @@ function FriendsSection()
 
   return(
    <Container className="friends-page-subsection-add-friend leaderboard userSearchList">
+      <Row>
+ 
+            <Col sm={12}>
+            <h2 style={{ marginBottom: "3px"}}>Search for users to add</h2>
+            <hr id="user-profile-hr" style={{width: "410px", marginBottom: "15px"}} />
+            </Col>
+
+      </Row>
       <Row className="friends-search-add">
           <Col sm={6}>
             <input type="text" id="search-user-input" id="run-text" placeholder="Search user" 
                   ref={(c) => search = c} style={{width: "300px", marginLeft: "10px"}} />
           </Col>
           <Col sm={6}>
-            <Button variant="primary" className="search-run-buttons" id="addRunButton"
+            <Button variant="primary" className="search-run-buttons" style={{float: "right"}} id="addRunButton"
                   onClick={searchUser}>Search User</Button>
             
           </Col>
@@ -376,12 +384,12 @@ function FriendsSection()
         </div>
       </Row>
 
-      <Row className="friends-search-add" id="search-friends-container">
+      {/* <Row className="friends-search-add" id="search-friends-container">
           <Col sm={9}>
             <Button variant="primary" className="search-run-buttons" id="addRunButton"
                       onClick={handleShowEdit}>Search Friends</Button>       
           </Col>
-      </Row>
+      </Row> */}
       
 
        

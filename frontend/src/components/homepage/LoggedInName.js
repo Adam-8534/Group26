@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 
 function LoggedInName()
 {
@@ -27,6 +27,7 @@ function LoggedInName()
   
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handler = () => {
     
@@ -38,7 +39,11 @@ function LoggedInName()
 
   const handleCloseEdit = () => setShowModalEdit(false);
   const handleShowEdit = () => setShowModalEdit(true);
-  const handleCloseDelete = () => setShowModalDelete(false);
+  const handleCloseDelete = () => 
+  {
+    setShowModalDelete(false);
+  }
+    
   const handleShowDelete = () => setShowModalDelete(true);
 
   const [message,setMessage] = useState('');
@@ -229,6 +234,7 @@ function LoggedInName()
     </Button>
 
     <div>
+      
       <Modal dialogClassName="edit-user-modal" show={showModalEdit} onHide={handleCloseEdit}>
         <Modal.Header>
         <Modal.Title>Edit Account</Modal.Title>
@@ -255,14 +261,18 @@ function LoggedInName()
           <input type="password" className="register-input" id="registerNewPassword" placeholder="New Password" ref={(c) => newPassword = c} />
         </Modal.Body>
         <Modal.Footer>
-        
-        {/* <Button variant="primary" onClick={() => { handleClose(); editUser(); editPassword();}}> */}
 
         <Button className="deleteAccount" variant="danger" onClick={handleShowDelete}>
             Delete User
         </Button>
         <div className="delete-user-modal">
           <Modal show={showModalDelete} onHide={handleCloseDelete}>
+            <Alert show={showAlert} variant="danger" onClose={() => setShowAlert(false)}>
+              <Alert.Heading>Account deleted</Alert.Heading>
+              <p>Your account has been deleted! Goodbye</p>
+              <Button variant="danger" onClick={handleCloseDelete, deleteUser}>Exit</Button>
+            </Alert>
+            
             <Modal.Header>
             <Modal.Title>Delete Account</Modal.Title>
             </Modal.Header>
@@ -272,7 +282,10 @@ function LoggedInName()
             <Button variant="secondary" onClick={handleCloseDelete}>
               No, I wish to Keep.
             </Button>
-            <Button variant="danger" onClick={handleCloseDelete, deleteUser}>
+            {/* <Button variant="danger" onClick={handleCloseDelete, deleteUser}>
+              Delete My Account
+            </Button> */}
+            <Button variant="danger" onClick={() => setShowAlert(true)}>
               Delete My Account
             </Button>
             </Modal.Footer>
