@@ -29,16 +29,16 @@ function LoggedInName()
   let returnMessage;
   
   const [userEmail,setUserEmail] = useState('');
+  const [userTotalRuns,setUserTotalRuns] = useState('');
+  const [userTotalFriends,setTotalFriends] = useState('');
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
   const handler = () => {
-    
-    editUser()
+    editUser();
     editPassword();
     handleCloseEdit();
-    
   }
 
   const handleCloseEdit = () => setShowModalEdit(false);
@@ -95,9 +95,17 @@ function LoggedInName()
                 var searchFriendResults = res.results;
                 console.log(searchFriendResults);
 
-                let email = "";
-                setUserEmail(email)
+                let email = searchFriendResults[0].Email;
+                let userTotalRuns = searchFriendResults[0].TotalRuns;
+                let userTotalFriends = searchFriendResults[0].FriendsArray.length;
+                console.log(email)
+                console.log(userTotalRuns)
+                console.log(userTotalFriends)
                 
+                setUserEmail(email);
+                setUserTotalRuns(userTotalRuns);
+                setTotalFriends(userTotalFriends);
+
             }
         })
         .catch(function (error) 
@@ -282,17 +290,17 @@ function LoggedInName()
    <div className="homepage-user-profile" id="logged-in-div">
     <h2 id="userName">Welcome, <br /> {firstName} {lastName}</h2>
 
-    <Gravatar className="gravatar-images mb-3" size={100} email="mathews.kyle@gmail.com" />
+    <Gravatar className="gravatar-images mb-3" size={100} email={userEmail} />
 
     <hr id="user-profile-hr" style={{width: "300px"}} />
     <div className="user-profile-stats">
       <h5>Runs</h5>
-      <h3> {totalRuns} </h3>
+      <h3> {userTotalRuns} </h3>
     </div>
     <hr id="user-profile-hr" />
     <div className="user-profile-stats">
       <h5>Friends</h5>
-      <h3> {totalFriends} </h3>
+      <h3> {userTotalFriends} </h3>
     </div>
     <hr id="user-profile-hr" style={{width: "300px"}} />
     <Button variant="primary" className="edit-profile-button" onClick={handleShowEdit}>
