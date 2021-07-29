@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Button } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Gravatar from 'react-gravatar'
 
 function Leaderboard()
 {
@@ -342,7 +343,7 @@ function Leaderboard()
           <Modal.Body>
             <p>{friendMessage}</p>
             <input type="text" className="search-friend-input mb-3" id="searchFriendFullName" placeholder="Search For a Friend"
-            ref={(c) => searchFriend = c} /> <Button variant="primary" className="search-friend-buttons" id="addFriendButton"
+            ref={(c) => searchFriend = c} /> <Button style={{float: "right"}} variant="primary" className="search-friend-buttons" id="addFriendButton"
             onClick={searchFriends} > Search Friend </Button><br />
             <Row>
               <Col>{friendsList}</Col>
@@ -358,6 +359,7 @@ function Leaderboard()
             <Modal dialogClassName="View Profile" show={showModalView} onHide={handleCloseView}>
             <Modal.Header>
               <Modal.Title>View Profile</Modal.Title>
+              <Gravatar className="gravatar-images mb-3" size={75} email={friendsViewEmail} />
             </Modal.Header>
 
             <Modal.Body>
@@ -371,7 +373,7 @@ function Leaderboard()
               </Row>
               <Row>
                 <strong>Total run distance: </strong>
-                <p>{friendsViewTotalDistance}</p>
+                <p>{friendsViewTotalDistance.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
               </Row>
               <Row>
                 <strong>Total runs: </strong>
