@@ -35,7 +35,7 @@ function Leaderboard()
     var config = 
         {
             method: 'post',
-            url: bp.buildPath('../../../../api/listfriends'),	
+            url: bp.buildPath('../../../../api/listleaderboard'),	
             headers: 
             {
                 'Content-Type': 'application/json'

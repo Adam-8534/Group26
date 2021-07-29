@@ -52,7 +52,7 @@ const ConfirmRegisterPage = () =>
             {	
                 console.log("success");
                 console.log(res)
-                // window.location.href = '/login';
+                window.location.href = '/login';
             }
         })
         .catch(function (error) 
