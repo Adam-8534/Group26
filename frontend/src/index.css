@@ -398,13 +398,6 @@ code {
   cursor: pointer;
 }
 
-.search-run-buttons{
-  color: white;
-  background-color: #17bf33;
-  border-radius: 8px;
-  border: 1px solid black;
-}
-
 .search-run-buttons:hover {
   cursor: pointer;
 }
